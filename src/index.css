@@ -1,0 +1,244 @@
+.MuiLoadingButton-root {
+  background: hsl(150, 100%, 34%);
+}
+
+.MuiLoadingButton-root:hover {
+  background: hsl(148, 37%, 59%);
+}
+
+.css-1uamm5k-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+  color: hsl(148, 37%, 59%);
+}
+
+.helperTextColor {
+  color: red;
+}
+
+/* .go1725278324 {
+  background-color: transparent !important;
+} */
+.apexcharts-toolbar {
+  top: 3px !important;
+  right: -21px !important;
+}
+.apexcharts-zoomin-icon,
+.apexcharts-zoomout-icon,
+.apexcharts-zoom-icon,
+.apexcharts-pan-icon,
+.apexcharts-reset-icon {
+  display: none !important;
+}
+.css-bmprcn-MuiPaper-root-MuiDrawer-paper,
+.css-7lh4qq-MuiPaper-root-MuiDrawer-paper {
+  background: hsl(211, 24%, 17%);
+}
+
+.apexcharts-legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.donut-center-text {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 24px; /* Adjust the font size as needed */
+  color: #333; /* Text color */
+  font-weight: bold; /* Font weight (if desired) */
+  /* Add any other styling you need */
+}
+/* .donut-center-text {
+  position: absolute;
+  top: 80px;
+  left: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+.donut-center-text > h2 {
+  font-size: 1.5rem;
+}
+
+.round-box {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid black;
+  background-color: green;
+  border-radius: 50%; /* Makes the box round */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+.round-boxWhite {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid black;
+  background-color: white;
+  border-radius: 50%; /* Makes the box round */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.progress-box {
+  width: 100%; /* Adjust the width as needed */
+  height: 28px; /* Adjust the height as needed */
+  background-color: #ceddee; /* Green background color */
+  border-radius: 100px; /* Rounded corners */
+  text-align: center;
+  color: white; /* White text color */
+  font-weight: bold;
+  font-weight: 400;
+  font-size: 12px; /* Adjust the font size as needed */
+  line-height: 30px; /* Center the text vertically */
+}
+
+/* Add animation to the progress */
+@keyframes progressAnimation {
+  0% {
+    width: 0;
+  }
+}
+
+.progress-bar {
+  animation: progressAnimation 2s ease-in-out; /* Adjust animation duration as needed */
+  /* Adjust the initial width (progress) */
+  height: 100%;
+
+  display: flex;
+  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.titleBox {
+  width: 80px;
+  height: 80px;
+  border: 2px solid black;
+  background: #c4cdd5;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contentBox {
+  width: 19px;
+  height: 7px;
+  border-radius: 2px;
+}
+
+.apexcharts-title-text {
+  font-size: 0.65rem;
+}
+
+/* .chartElement {
+  height: 220px;
+}
+
+/* Media query for screens with a maximum width of 768px */
+@media (max-width: 768px) {
+  .chartElement {
+    height: 100%; /* New height value for screens up to 768px wide */
+  }
+}
+
+/* Media query for screens with a maximum width of 480px */
+@media (max-width: 480px) {
+  .chartElement {
+    height: 100%; /* New height value for screens up to 480px wide */
+  }
+}
+
+.css-1bkdxi2-MuiPaper-root {
+  /* height: 77vh !important;
+  margin: 0px;
+  max-height: 100vh;
+  max-width: 100vw;
+  top: 92px !important;
+  padding: 0px;
+  position: absolute !important;
+  width: 78vw !important;
+  left: 279px !important; */
+}
+
+.badge {
+  background: #d9d9d9;
+  padding: 0.4rem;
+  border-radius: 5px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  /* height: 40px; */
+}
+
+.boxContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.medCon {
+  display: flex;
+  /* padding-left: 2rem;
+  padding-right: 2rem; */
+}
+
+.stockBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.4rem;
+  width: 100%;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.stockText {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+}
+.card {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 0 2px 0 rgba(145,158,171,.2),0 12px 24px -4px rgba(145,158,171,.12);
+  transition: box-shadow .3s cubic-bezier(.4,0,.2,1) 0ms;
+}
+.card-greenish {
+  background: linear-gradient(135deg, rgba(91, 228, 155, 0.2), rgba(0, 167, 111, 0.2)) rgb(255, 255, 255);
+  color: #004b50;
+}
+.card-blueish {
+  background: linear-gradient(135deg, rgba(97, 243, 243, 0.2), rgba(0, 184, 217, 0.2)) rgb(255, 255, 255);
+  color: #003768;
+}
+.card-goldish {
+  background: linear-gradient(135deg, rgba(255, 214, 102, 0.2), rgba(255, 171, 0, 0.2)) rgb(255, 255, 255);
+  color: #7a4100;
+}
+.card-reddish {
+  background: linear-gradient(135deg, rgba(255, 172, 130, 0.2), rgba(255, 86, 48, 0.2)) rgb(255, 255, 255);
+  color: rgb(122, 9, 22);
+}
+
+.labelBg{
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-top: 4px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
