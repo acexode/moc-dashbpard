@@ -109,7 +109,7 @@ const Supervisory: FC<ISupervisory> = ({ supportiveSupervision, tier }) => {
           {tier === "National" && (
             <span style={{ fontWeight: 600, color: getColor(value) }}> {value}%</span>
           )}
-          {' '}Supervisory visits conducted by SPHCB/A
+          {' '}Supervisory Visits Conducted by States (SPHCB/A) to PHCs
         </Typography>
 
         <div style={{ width: "200px" }}>
