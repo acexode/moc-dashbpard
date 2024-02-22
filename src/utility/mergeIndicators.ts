@@ -10,7 +10,7 @@ interface ArrayElement {
 }
 
 export function mergeIndicatorsArrays<T extends ArrayElement>(
-  commonFields: (keyof CommonFields)[],
+  commonFields: any,
   ...arrays: T[][]
 ): T[] {
   const mergedArray: T[] = [];
@@ -28,7 +28,7 @@ export function mergeIndicatorsArrays<T extends ArrayElement>(
   arrays.forEach((array) => {
     mergedArray.forEach((mergedItem) => {
       const matchingItem = array.find((item) =>
-        commonFields.every((field) => mergedItem[field] === item[field]),
+        commonFields.every((field: any) => mergedItem[field] === item[field]),
       );
 
       if (matchingItem) {
@@ -42,7 +42,7 @@ export function mergeIndicatorsArrays<T extends ArrayElement>(
     array.forEach((item) => {
       const notMatched = mergedArray.every(
         (mergedItem) =>
-          !commonFields.every((field) => mergedItem[field] === item[field]),
+          !commonFields.every((field: any) => mergedItem[field] === item[field]),
       );
 
       if (notMatched) {
