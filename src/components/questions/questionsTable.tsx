@@ -378,7 +378,7 @@ const QuestionsTable: FC<ITable> = ({ dataList, page_title, table_Head,loading,f
           </Card>
         </Container>
       </Page>
-      <AddEdit toggle={toggle} modal={modal} formData={formData} url={url} edit={edit}
+      <AddEdit toggle={toggle} setFormData={setFormData} modal={modal} formData={formData} url={url} edit={edit}
        fetchAllData={fetchAllData}  />
     </>
   );
