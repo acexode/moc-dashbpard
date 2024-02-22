@@ -1,3 +1,4 @@
+//@ts-check
 interface CommonFields {
   year: number;
   quarter: number;
