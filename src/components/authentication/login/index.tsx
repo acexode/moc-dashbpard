@@ -17,7 +17,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 const schema = yup.object().shape({
     email: yup.string().email().required("Email Address is required"),
-    password: yup.string().required("*Password is required").min(8),
+    password: yup.string().required("*Password is required").min(6),
   });
 
 const LoginForm:FC = () => {
@@ -75,6 +75,7 @@ const LoginForm:FC = () => {
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
             label="Password"
+            sx={{color: '#fff', background: 'white'}}
             {...register('password')}
             InputProps={{
               endAdornment: (

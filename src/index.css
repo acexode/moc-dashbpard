@@ -214,31 +214,84 @@
 .card {
   background-color: #fff;
   border-radius: 16px;
-  box-shadow: 0 0 2px 0 rgba(145,158,171,.2),0 12px 24px -4px rgba(145,158,171,.12);
-  transition: box-shadow .3s cubic-bezier(.4,0,.2,1) 0ms;
+  box-shadow: 0 0 2px 0 rgba(145, 158, 171, 0.2),
+    0 12px 24px -4px rgba(145, 158, 171, 0.12);
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 .card-greenish {
-  background: linear-gradient(135deg, rgba(91, 228, 155, 0.2), rgba(0, 167, 111, 0.2)) rgb(255, 255, 255);
+  background: linear-gradient(
+      135deg,
+      rgba(91, 228, 155, 0.2),
+      rgba(0, 167, 111, 0.2)
+    )
+    rgb(255, 255, 255);
   color: #004b50;
 }
 .card-blueish {
-  background: linear-gradient(135deg, rgba(97, 243, 243, 0.2), rgba(0, 184, 217, 0.2)) rgb(255, 255, 255);
+  background: linear-gradient(
+      135deg,
+      rgba(97, 243, 243, 0.2),
+      rgba(0, 184, 217, 0.2)
+    )
+    rgb(255, 255, 255);
   color: #003768;
 }
 .card-goldish {
-  background: linear-gradient(135deg, rgba(255, 214, 102, 0.2), rgba(255, 171, 0, 0.2)) rgb(255, 255, 255);
+  background: linear-gradient(
+      135deg,
+      rgba(255, 214, 102, 0.2),
+      rgba(255, 171, 0, 0.2)
+    )
+    rgb(255, 255, 255);
   color: #7a4100;
 }
 .card-reddish {
-  background: linear-gradient(135deg, rgba(255, 172, 130, 0.2), rgba(255, 86, 48, 0.2)) rgb(255, 255, 255);
+  background: linear-gradient(
+      135deg,
+      rgba(255, 172, 130, 0.2),
+      rgba(255, 86, 48, 0.2)
+    )
+    rgb(255, 255, 255);
   color: rgb(122, 9, 22);
 }
 
-.labelBg{
+.labelBg {
   width: 15px;
   height: 15px;
-  border-radius: 50%;
   margin-top: 4px;
   margin-right: 5px;
   margin-left: 5px;
+}
+.stockMainText {
+  font-size: 16px;
+  color: #fff;
+  font-weight: 800;
+}
+.customChart {
+  width: 200px;
+}
+.customDivider {
+  margin-top: 10px;
+}
+@media screen and (min-width: 1200px) and (max-width: 1345px) {
+  /* Your CSS styles for screens between 1200px and 1330px */
+  .customChart {
+    width: 170px;
+  }
+  .stockBox {
+    padding: 0.5rem;
+  }
+  .stockText {
+    font-size: 0.75rem;
+  }
+  .stockMainText {
+    font-size: 0.95rem;
+  }
+  .customDivider {
+    margin-top: 0px;
+  }
+}
+
+.MuiLinearProgress-bar {
+  background-color: hsl(150, 100%, 34%) !important;
 }

@@ -58,12 +58,12 @@ interface IMoreMenu {
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
-     {(type === "Question" || type ==="Ward" )&&   <MenuItem onClick={toggle} sx={{ color: 'text.secondary' }}>
+     {/* {(type === "Question" || type ==="Ward" )&&   <MenuItem onClick={toggle} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={toggleIcon} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Deactivate" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>}
+        </MenuItem>} */}
 
        
       </Menu>

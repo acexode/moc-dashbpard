@@ -1,22 +1,18 @@
 // @ts-nocheck
 
-import { Card, Grid, Stack, TextField, Autocomplete, Tabs, Tab } from "@mui/material";
+import { Card, Grid, Stack, TextField, Autocomplete, Box } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { levels } from "../../../constants";
 import { useAuthUserContext } from "../../../context/authUser.context";
 import axiosInstance from "../../../services/api_service";
 import { AllStates } from "../../../db/states";
 import { getColor } from "../../../utility";
+import SelectInput from "../../SelectInput";
 
 const year = new Date().getFullYear();
-const years = Array.from(new Array(10), (val, index) => index + year);
+const years = Array.from(new Array(10), (val, index) => year - index);
 const q = [1, 2, 3, 4];
-function a11yProps(index:any) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+
 interface IState {
   national: string;
   state: string;
@@ -27,16 +23,12 @@ interface IState {
 interface DropDown {
   selectedState: IState;
   setSelectedState: any;
-  tab: any;
-  setTab: any
 }
 const dummyStates = AllStates;
 
 const SelectDropDownCard: FC<DropDown> = ({
   selectedState,
   setSelectedState,
-  tab,
-  setTab
 }) => {
   const [states, setStates] = useState([]);
   const [lgas, setLgas] = useState([]);
@@ -71,19 +63,6 @@ const SelectDropDownCard: FC<DropDown> = ({
     }
   }, [userProfile, lgas]);
 
-  //   useEffect(()=>{
-  //     axiosInstance.get(`/locations/states`).then(res =>{
-  //       const options = res?.data?.map((dt:any) =>{
-  //         return {
-  //           label: dt?.name,
-  //           id: dt?.id
-  //         }
-  //       })
-  //       setStates(options)
-  //     }).catch(error =>{
-  //       console.log(error)
-  //     })
-  // },[])
 
   useEffect(() => {
     axiosInstance
@@ -101,192 +80,100 @@ const SelectDropDownCard: FC<DropDown> = ({
         console.log(error);
       });
   }, [stateId]);
+  const handleChange = (val, field) => {
+    setSelectedState((prevState) => ({
+      ...prevState,
+      [field]: ['year', 'quarter'].includes(field) ? parseInt(val) : val,
+    }));
+  };
   return (
     <Grid item xs={12} md={12}>
-      <Card sx={{ p: 1 }} elevation={1}>
-        <Stack sx={{ pt: "0px", pb: '14px' }}>
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            // spacing={{ xs: 3, sm: 2 }}
-          >
-            <Tabs
-            style={{width: '100%'}}
-          value={tab}
-          onChange={setTab}
-          textColor="primary"
-          indicatorColor="primary"
-          variant="scrollable"
-          aria-label="basic tabs example"
-          TabIndicatorProps={{
-            style: {
-              backgroundColor: 'hsl(150, 100%, 34%)', 
-                overflowX:"auto"
-            },
-          }}
-        >
-          <Tab style={{width: '20%'}} label="Overall" {...a11yProps(0)} />
-          <Tab style={{width: '20%'}} label="NPHCDA" {...a11yProps(1)} />
-          <Tab style={{width: '20%'}} label="NHIA" {...a11yProps(2)} />
-          <Tab style={{width: '20%'}} label="EMT" {...a11yProps(3)} />
-        </Tabs>
-          </Stack>
-        </Stack>
-        <Stack spacing={3}>
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            spacing={{ xs: 3, sm: 2 }}
-          >
-            <Autocomplete
-              fullWidth
-              defaultValue={"National"}
-              placeholder="National"
-              options={["National"]}
-              size="small"
-              value={selectedState.national}
-              disabled={userProfile?.level === levels.state}
-              onChange={(event, newValue) => {
-                setSelectedState((prevState) => ({
-                  ...prevState,
-                  national: newValue,
-                }));
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="National" />
+      <Card sx={{ p: 1, height: "140px" }} elevation={1}>
+        <Grid spacing={3} container>
+          <Grid item xs={7}>
+            <Stack spacing={{ xs: 1, sm: 1 }}>
+              {/* <SelectInput
+                disabled={userProfile?.level === levels.state}
+                options={["National"]}
+                defaultValue={selectedState.national}
+                name="national"
+                handleChange={handleChange}
+              /> */}
+              {userProfile?.level !== levels?.state ? (
+                <SelectInput
+                  name="state"
+                  handleChange={handleChange}
+                  isObject
+                  options={dummyStates}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    border: "1px solid #eee",
+                    padding: "0px",
+                    display: "block",
+                    height: "25px",
+                    paddingLeft: '5px',
+                    paddingTop: '5px',
+                    fontSize: '12px',
+                    borderRadius: "8px",
+                  }}
+                >
+                 
+                  {selectedState?.state}
+                </Box>
               )}
-            />
-            {/* <Autocomplete
-              // select
-              fullWidth
-              // label="Role"
-
-              placeholder="Year"
-              // {...getFieldProps('access.role')}
-              // SelectProps={{ native: true }}
-              options={years}
-              renderInput={(params) => <TextField {...params} label="Year" />}
-            /> */}
-            {userProfile?.level === levels?.state ? (
-              <TextField
-                variant="outlined"
-                fullWidth
-                disabled
-                size="small"
-                value={defaultState?.label}
-                type={"text"}
+              <SelectInput
+                name="year"
+                defaultValue={selectedState.year}
+                handleChange={handleChange}
+                options={years}
               />
-            ) : (
-              <Autocomplete
-                fullWidth
-                placeholder="State"
-                options={dummyStates}
-                size="small"
-                disabled={userProfile?.level !== levels.national}
-                getOptionLabel={(option) => option?.label}
-                onChange={(e, value) => {
-                  setSelectedState((prevState) => ({
-                    ...prevState,
-                    state: value?.label,
-                  }));
-                  return setStateId(value?.id);
-                }}
-                renderInput={(params) => (
-                  <TextField {...params} label="State" />
-                )}
+              <SelectInput
+                name="quarter"
+                defaultValue={selectedState.quarter}
+                handleChange={handleChange}
+                options={q}
               />
-            )}
-            {/* <Autocomplete
-              fullWidth
-              placeholder="LGA"
-              options={lgas}
-              disabled={userProfile?.level === levels.lga}
-              getOptionLabel={(option) => option.label}
-              onChange={(e,value) => {
-                setSelectedState((prevState) => ({
-                  ...prevState,
-                  lga: value?.label,
-                }));
-                return  setLgaId(value?.id)
-              }}
-              renderInput={(params) => <TextField {...params} label="LGA" />}
-            /> */}
-            <Autocomplete
-              fullWidth
-              placeholder="Year"
-              options={years}
-              size="small"
-              value={selectedState.year}
-              disableClearable={true}
-              onChange={(event, newValue) => {
-                setSelectedState((prevState) => ({
-                  ...prevState,
-                  year: newValue,
-                  quarter: prevState.quarter,
-                }));
-              }}
-              renderInput={(params) => <TextField {...params} label="Year" />}
-            />
 
-            <Autocomplete
-              fullWidth
-              placeholder="Quarter"
-              options={q}
-              size="small"
-              value={selectedState.quarter}
-              disableClearable={true}
-              onChange={(event, newValue) => {
-                setSelectedState((prevState) => ({
-                  ...prevState,
-                  quarter: newValue,
-                }));
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="Quarter" />
-              )}
-            />
-          </Stack>
-        </Stack>
-        <Stack  spacing={3} sx={{ pt: "10px" }}>
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            spacing={{ xs: 6, sm:25 }}
-          >
-            <Grid item xs={12} md={6} sm={12} lg={4}>
-              <div style={{ display: "flex" }}>
+            </Stack>
+          </Grid>
+          <Grid item xs={5}>
+            <Stack
+              direction={{ xs: "column", sm: "column" }}
+              // spacing={{ xs: 3, sm: 2 }}
+            >
+              <div style={{ display: "flex", fontSize: "12px",  marginBottom: '20px', position: 'relative' }}>
                 <div
                   className="labelBg"
                   style={{ background: `${getColor(0)}` }}
                 ></div>
-                0 -50
+                <span style={{transform: 'translateY(10)', position: 'relative', left: '0px', top: '3px'}}>0 - 50</span>
               </div>
-            </Grid>
-            <Grid item xs={12} md={6} sm={12} lg={4}>
-              <div style={{ display: "flex" }}>
+
+              <div style={{ display: "flex", fontSize: "12px", marginBottom: '20px', position: 'relative'  }}>
                 <div
                   className="labelBg"
                   style={{ background: `${getColor(51)}` }}
                 ></div>
+                <span style={{transform: 'translateY(10)', position: 'relative', left: '0px', top: '3px'}}>
                 51 - 79
+
+                </span>
               </div>
-            </Grid>
-            <Grid item xs={12} md={6} sm={12} lg={4}>
-              <div style={{ display: "flex" }}>
+              <div style={{ display: "flex", fontSize: "12px", position: 'relative'  }}>
                 <div
                   className="labelBg"
                   style={{ background: `${getColor(81)}` }}
                 ></div>
-                80 and above
+                <span style={{transform: 'translateY(10)', position: 'relative', left: '0px', top: '3px'}}>
+
+                 {" >="} 80 
+                </span>
               </div>
-            </Grid>
-            <Grid item xs={12} md={6} sm={12} lg={3}>
-              <div style={{ display: "flex", marginLeft: "10px" }}>
-                Feedback Date: &nbsp;
-                <span style={{ fontWeight: 700 }}>
-                  Q{selectedState.quarter}, {year}
-                </span>{" "}
-              </div>
-            </Grid>
-          </Stack>
-        </Stack>
+            </Stack>
+          </Grid>
+        </Grid>
       </Card>
     </Grid>
   );

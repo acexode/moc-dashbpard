@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme:any) => {
         width: '100%'
       }
     },
+    snackbar: {
+      zIndex: '3000 !important',
+   },
     contentRoot: {
       width: '100%',
       padding: theme.spacing(1.5),
@@ -101,8 +104,10 @@ export default function NotistackProvider({ children }:any) {
       style={{
         background:"#fff",
         color:"#000",
-        boxShadow: " rgba(149, 157, 165, 0.2) 0px 8px 24px"
+        boxShadow: " rgba(149, 157, 165, 0.2) 0px 8px 24px",
+        zIndex: '5000'
       }}
+      classes={{containerRoot: classes.snackbar}}
       // classes={{
       //   containerRoot: classes.containerRoot,
       //   contentRoot: classes.contentRoot,

@@ -62,6 +62,7 @@ export default function Router() {
       children: [
         { path: "", element: <Navigate to="/dashboard/app" replace /> },
         { path: "app", element: <GeneralApp /> },
+        { path: "nphcda", element: <NPHCDADashboard /> },
         {
           path: "m-and-e",
 
@@ -76,6 +77,19 @@ export default function Router() {
             { path: "new-assessment", element: <NewAssessmentForm /> },
             { path: "new-assessment-lga", element: <NewAssessmentFormLGA /> },
             { path: "new-assessment-hf", element: <NewAssessmentFormHF /> },
+            { path: "progress-report/:state?/:lga?", element: <Progress /> },
+          ],
+        },
+        {
+          path: "financial_management",
+
+          children: [
+            { path: "dashboard", element: <FinanceDashboard /> },
+            { path: "business_plan/:state?/:lga?", element: <BusinessPlan /> },
+            { path: "retirement", element: <FinanceRetirement /> },
+            { path: "viewLgaPlan/:facility", element: <FacilityPlan /> },
+            { path: "viewRetirement", element: <ViewRetirement /> },
+           
           ],
         },
         {
@@ -84,6 +98,7 @@ export default function Router() {
             { path: "user", element: <UserManagement /> },
             { path: "facility", element: <FacilityManagement /> },
             { path: "questions", element: <QuestionsSettings /> },
+            { path: "moc-kpi", element: <MocKPI /> },
             { path: "wards", element: <WardSettings /> },
            
           ],
@@ -108,6 +123,9 @@ export default function Router() {
 const Login = Loadable(lazy(() => import("../pages/authentication/login")));
 const GeneralApp = Loadable(
   lazy(() => import("../pages/dashboard/general_app"))
+);
+const NPHCDADashboard = Loadable(
+  lazy(() => import("../pages/dashboard/nphcda-dashboard"))
 );
 const StatePage = Loadable(lazy(() => import("../pages/dashboard/state")));
 const LGAPage = Loadable(lazy(() => import("../pages/dashboard/lga")));
@@ -139,8 +157,29 @@ const FacilityManagement = Loadable(
 const QuestionsSettings = Loadable(
   lazy(() => import("../pages/settings/questionsSettings"))
 );
+const MocKPI = Loadable(
+  lazy(() => import("../pages/settings/MocKPI"))
+);
 const WardSettings = Loadable(
   lazy(() => import("../pages/settings/wardSettings"))
+);
+const FinanceDashboard = Loadable(
+  lazy(() => import("../pages/dashboard/finance/dashboard"))
+);
+const BusinessPlan = Loadable(
+  lazy(() => import("../pages/dashboard/finance/business_plan"))
+);
+const FinanceRetirement = Loadable(
+  lazy(() => import("../pages/dashboard/finance/retirement"))
+);
+const FacilityPlan = Loadable(
+  lazy(() => import("../pages/dashboard/finance/components/facilityPlan"))
+);
+const ViewRetirement = Loadable(
+  lazy(() => import("../pages/dashboard/finance/components/viewRetirement"))
+);
+const Progress = Loadable(
+  lazy(() => import("../pages/dashboard/reports/progress"))
 );
 const Page500 = Loadable(lazy(() => import("../pages/Page500")));
 const NotFound = Loadable(lazy(() => import("../pages/Page404")));

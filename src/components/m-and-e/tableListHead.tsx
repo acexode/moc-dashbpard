@@ -1,7 +1,9 @@
+ // @ts-nocheck
  // material
  import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 import { FC, JSXElementConstructor, Key, ReactElement, ReactFragment, ReactPortal } from 'react';
 
+import { withStyles } from "@mui/styles";
 // ----------------------------------------------------------------------
 
 interface IListHead {
@@ -13,6 +15,12 @@ interface IListHead {
   onRequestSort: any,
   onSelectAllClick: any
 };
+const StyledTableHead = withStyles((theme: any) => ({
+  root: {
+    backgroundColor: 'orange'
+  }
+}))(TableHead);
+
 
 const TableListHead:FC<IListHead> = ({
   order,

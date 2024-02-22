@@ -1,7 +1,11 @@
 import { Icon } from "@iconify/react";
 import { useSnackbar } from "notistack";
-import { useRef, useState, FC } from "react";
-import homeFill from "@iconify/icons-eva/home-fill";
+import { useRef, useState, FC, useEffect } from "react";
+import homeFill from "@iconify/icons-eva/home-outline";
+import usersFill from "@iconify/icons-eva/people-outline";
+import facilityFill from "@iconify/icons-ant-design/apartment-outline";
+import questionFill from "@iconify/icons-eva/question-mark-circle-outline";
+import wardFill from "@iconify/icons-eva/map-outline";
 
 import { Link as RouterLink } from "react-router-dom";
 // material
@@ -14,15 +18,41 @@ import MyAvatar from "../../components/MyAvatar";
 import MenuPopover from "../../components/MenuPopover";
 import useIsMountedRef from "../../hooks/useIsMountedRef";
 import { useAuthUserContext } from "../../context/authUser.context";
+import { PATH_DASHBOARD } from "../../routes/paths";
+import { levels } from "../../constants";
 
 // ----------------------------------------------------------------------
 
+interface IMENU {
+  label: string;
+  icon: any;
+  linkTo: string;
+}
+const ADMIN_MENU_OPTIONS: IMENU[] = [
+  // {
+  //   label: "Home",
+  //   icon: homeFill,
+  //   linkTo: "/dashboard/app",
+  // },
+
+  {
+    label: "MOC KPI",
+    linkTo: PATH_DASHBOARD.settings.MocKPIManagement,
+    icon: questionFill,
+  },
+  {
+    label: "Users",
+    linkTo: PATH_DASHBOARD.settings.userManagement,
+    icon: usersFill,
+  },
+];
 const MENU_OPTIONS = [
   {
     label: "Home",
     icon: homeFill,
     linkTo: "/dashboard/app",
   },
+
   // {
   //   label: 'Profile',
   //   icon: personFill,
@@ -40,12 +70,24 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
+  const [menuOptions, setmenuOptions] = useState<IMENU[]>([]);
   const isMountedRef = useIsMountedRef();
   const {
     handleSignOut,
     userState: { userProfile },
   } = useAuthUserContext();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (
+      userProfile?.level === levels.state ||
+      userProfile?.level === levels.lga
+    ) {
+      setmenuOptions(MENU_OPTIONS);
+    } else if (userProfile?.level === levels.national) {
+      setmenuOptions(ADMIN_MENU_OPTIONS);
+    }
+  }, [userProfile]);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -94,7 +136,7 @@ export default function AccountPopover() {
         open={open}
         onClose={handleClose}
         anchorEl={anchorRef.current}
-        sx={{ width: 220 }}
+        sx={{ width: 250 }}
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
@@ -107,7 +149,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ my: 1 }} />
 
-        {MENU_OPTIONS.map((option) => (
+        {menuOptions.map((option) => (
           <MenuItem
             key={option.label}
             to={option.linkTo}
@@ -132,7 +174,7 @@ export default function AccountPopover() {
         <Box sx={{ p: 2, pt: 1.5 }}>
           <Button
             fullWidth
-            color="inherit"
+            color="error"
             variant="outlined"
             onClick={handleLogout}
           >

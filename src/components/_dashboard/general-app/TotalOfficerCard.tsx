@@ -5,61 +5,36 @@ import { Card, CardHeader, Box, Typography } from "@mui/material";
 //
 import { FC, useEffect, useState } from "react";
 import hrIcon from "../../../assets/hr.svg";
+import { indicatorSettings } from "../../../constants";
+import { AllIndicators } from "../../settings/allIndicators";
+import useSettings from "../../../hooks/useSettings";
+import TrendButton from "./TrendButton";
+import { getIndicatorTier } from "../../../utility";
+import { DefaultState, getLiveIndicator, processIndicators } from "../../../utility/processIndicator";
+import NoData from "./NoData";
+
+const today = new Date();
+const cquarter = Math.floor((today.getMonth() + 3) / 3) - 1;
 // -------------------------------------------------------------------
 interface IHumanResources {
-  midIndicator: any;
-  chewIndicator: any;
   tier: string
-  state: string
+  defualtState: DefaultState
 }
 const HumanResourcesCard: FC<IHumanResources> = ({
-  chewIndicator,
-  midIndicator,
   tier,
-  state
+  defualtState
 }) => {
-  const [series, setSeries] = useState([]);
-
-  useEffect(() => {
-    if (chewIndicator && midIndicator) {
-      // console.log(chewIndicator, midIndicator);
-      const mid = tier === 'State' ? midIndicator.filter(e => e?.state === state)[0] : midIndicator[0]
-      const chew = tier === 'State' ? chewIndicator.filter(e => e?.state === state)[0] :  chewIndicator[0]
-      if(mid && chew){
-        setSeries([
-          {
-            name: "Human Resource",
-            data: [
-              (mid['indicator20' + tier] * 100).toFixed(1),
-              (chew['indicator21' + tier] * 100).toFixed(1),
-            ],
-            // Set different colors for each bar
-          },
-        ]);
-
-      }else{
-        setSeries([
-          {
-            name: "",
-            data: [
-              0,
-              0,
-            ],
-            // Set different colors for each bar
-          },
-        ]);
-      }
-    }
-  }, [chewIndicator, midIndicator]);
-
-  const [options] = useState({
+  const {state, year, quarter, } = defualtState;
+  const [noData, setnoData] = useState(true)
+  const [options, setoptions] = useState({
     chart: {
-      id: "basic-bar",
-      // Set the height of the chart
+      toolbar: {
+        show: false
+      }
     },
 
     xaxis: {
-      categories: ["Midwives >= 2", "CHEWs >= 2"],
+      categories: ['', ''],
       // categories: ["2 or more Midwives","2 or more CHEWs"],
     },
     grid: {
@@ -71,27 +46,17 @@ const HumanResourcesCard: FC<IHumanResources> = ({
       offsetY: -2,
       align: "right",
     },
-    chart: {
-      toolbar: {
-        show: false,
-        offsetY: 30
-      },
-    },
     plotOptions: {
       bar: {
         horizontal: false,
         columnWidth: "40%",
         barHeight: "10%",
+        borderRadius: 8,
         distributed: false,
         rangeBarOverlap: true,
         rangeBarGroupRows: false,
         hideZeroBarsWhenGrouped: false,
         isDumbbell: true,
-        dataLabels: {
-          // position: 'top',
-          maxItems: 100,
-          hideOverflowingLabels: true,
-        },
         colors: {
           ranges: [
             {
@@ -114,11 +79,78 @@ const HumanResourcesCard: FC<IHumanResources> = ({
       },
     },
   });
+  const [indicator, setindicator] = useState(null)
+  const [series, setSeries] = useState([
+    {
+      name: "",
+      data: [
+        0,
+        0,
+      ],
+     
+    },
+  ]);
+  const {cachedIndicators, fetchedIndicators  } = useSettings()
 
+  useEffect(() => {
+    const settings = cachedIndicators;
+    setnoData(true);
+    // console.log(adhocMidIndicator);
+    if(settings && fetchedIndicators){
+      // console.log(settings, tier);
+      const {ltype, liveIndicators} = getLiveIndicator(settings, AllIndicators, tier, 'hr');
+      setindicator(ltype)
+      const labelTier = getIndicatorTier(tier);
+      const processed =  processIndicators(
+        fetchedIndicators,
+        ltype,
+        liveIndicators,
+        year,
+        quarter,
+        labelTier,
+        state,
+        'hr'
+      );
+      if(processed.length > 0){
+        setnoData(false)
+        const data = processed.map(e => e.value)
+         setSeries([
+          {
+            name: "Human Resource",
+            data,
+            // Set different colors for each bar
+          },
+        ]);
+        const opt = {
+          ...options,
+          xaxis: {
+            categories: liveIndicators.map(e => e.shortName),
+          },
+          dataLabels: {
+            // position: 'top',
+            maxItems: 100,
+            hideOverflowingLabels: true,
+            formatter: function(val, opt) {
+              return  val + "%"
+          },
+          },
+        }
+            setoptions(opt)
+
+      }else{
+        setnoData(true)
+      }
+
+    }
+  }, [fetchedIndicators, cachedIndicators])
+
+
+
+  
 
 
   return (
-    <Card style={{ height: "250px", overflow: 'visible' }} className="card">
+    <Card style={{ height: "308px", overflow: 'visible' }} className="card">
       <CardHeader
         title={
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -126,8 +158,9 @@ const HumanResourcesCard: FC<IHumanResources> = ({
             <Typography
               style={{ fontSize: "0.9rem", fontWeight: 500, color: "#212B36" }}
             >
-              Human Resources For Health
+              HR For Health
             </Typography>
+            {indicator && <TrendButton indicator={indicator} title="HR For Health" />}
           </div>
         }
       />
@@ -138,22 +171,15 @@ const HumanResourcesCard: FC<IHumanResources> = ({
           flexDirection: "column",
         }}
       >
-        <div style={{   position: 'absolute', top: '25%', left: '10%' }}>
+        {noData ? 
+        <NoData /> :
+
+        <div style={{   position: 'absolute', top: '25%', left: '5%' }}>
           <ReactApexChart options={options} series={series} type="bar" />
        
         </div>
-        {/* <div style={{ position: "relative", top: "-35px", left: '30px' }}>
-          <Typography
-            style={{ fontSize: "12px",  color: "#212B36" }}
-          >
-            2 or more Midwives
-          </Typography>
-          <Typography
-            style={{ fontSize: "12px",  color: "#212B36" }}
-          >
-            2 or more Chews
-          </Typography>
-        </div> */}
+      }
+  
       </Box>
     </Card>
   );

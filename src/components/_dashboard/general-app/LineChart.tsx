@@ -22,23 +22,18 @@ const LineChart:FC = () => {
         },
         series: [
           {
-            name: 'Series 1', // Name of the series
+            name: 'Expense across quarter', // Name of the series
             data: [20, 44, 65, 80, 65], 
             
             // Data points for the area chart
           },
           {
-            name: 'Series 2', // Name of the series
+            name: 'Revenue across quarter', // Name of the series
             data: [30, 40, 25, 50, 35], 
             
             // Data points for the area chart
           },
-          {
-            name: 'Series 3', // Name of the series
-            data: [25, 10, 95, 60, 32], 
-            
-            // Data points for the area chart
-          },
+        
         ],
       };
   return (

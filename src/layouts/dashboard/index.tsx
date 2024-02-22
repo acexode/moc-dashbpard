@@ -8,6 +8,7 @@ import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
 import DashboardFooter from './DashboardFooter';
+import { MHidden } from '../../components/@material-extend';
 
 // ----------------------------------------------------------------------
 
@@ -58,8 +59,11 @@ export default function DashboardLayout() {
   }, []);
   return (
     <RootStyle>
-      {/* <DashboardNavbar onOpenSidebar={() => setOpen(true)} /> */}
+      <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
+      <MHidden width="mdUp">
       <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+
+      </MHidden>
       <MainStyle
         sx={{
           transition: theme.transitions.create('margin', {
@@ -67,7 +71,9 @@ export default function DashboardLayout() {
           }),
           ...(collapseClick && {
             ml: '102px'
-          })
+          }),
+          mt: '80px'
+    
         }}
       >
         <Outlet />

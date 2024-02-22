@@ -68,6 +68,9 @@ const SupervisoryTable:FC<{supportiveSupervision:any}> = ({supportiveSupervision
           },
         }),
       }}
+      renderTopToolbarCustomActions={({ table }) => (
+        <HandleExport table={table} columns={columns} data={supervisoryData} tier={tier} />
+      )}
     />
   );
 };

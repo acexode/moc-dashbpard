@@ -14,7 +14,7 @@ import { IAuthContext, Props } from "./types";
 import tokenService from "../services/tokenService";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BASE_URL } from "../services/baseurl";
+import { BASE_URL, MOC_BASE_URL } from "../services/baseurl";
 import { useSnackbar } from "notistack";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@mui/material";
@@ -64,38 +64,50 @@ const AuthUserProvider = ({ children }: Props) => {
 
   const handleSignInUser = async (data: any) => {
     try {
-      const res = await axios.post(`${BASE_URL}/auth/login`, data);
-      tokenService.setToken(res.data?.token);
-      tokenService.setUser(JSON.stringify(res.data?.user));
-      dispatch({
-        type: userActions.SIGN_IN,
-        payload: res?.data,
-      });
-      if(res?.data?.user?.role === roles.facility_app){
-        enqueueSnackbar("User cannot sign in to app with role of Facility App", {
-        variant: "success",
-        action: (key) => (
-          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-            <Icon icon={closeFill} />
-          </MIconButton>
-        ),
-      });
-      }
-      else{
-  enqueueSnackbar("Login success", {
-        variant: "success",
-        action: (key) => (
-          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-            <Icon icon={closeFill} />
-          </MIconButton>
-        ),
-      });
+      const bhcpfdata = {
+        email: "super-admin@demo.com",
+        password: "password89!",
+      };
+      const mocResponse = await axios.post(`${MOC_BASE_URL}/auth/login`, data);;
+      const res = await axios.post(`${BASE_URL}/auth/login`, bhcpfdata);
+      if(mocResponse.data && res.data){
+        tokenService.setToken(res.data?.token);
+        tokenService.setUser(JSON.stringify(res.data?.user));
+        tokenService.setMOCToken('Bearer ' + mocResponse.data.token)
+        tokenService.setMOCUser(JSON.stringify(mocResponse.data.user))
+        console.log(mocResponse.data);
+        dispatch({
+          type: userActions.SIGN_IN,
+          payload: res?.data,
+        });
+        if (res?.data?.user?.role === roles.facility_app) {
+          enqueueSnackbar(
+            "User cannot sign in to app with role of Facility App",
+            {
+              variant: "success",
+              action: (key) => (
+                <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                  <Icon icon={closeFill} />
+                </MIconButton>
+              ),
+            }
+          );
+        } else {
+          enqueueSnackbar("Login success", {
+            variant: "success",
+            action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+            ),
+          });
+  
+          setTimeout(() => {
+            window.location.href = "/dashboard/app";
+          }, 500);
+        }
 
-      setTimeout(() => {
-        window.location.href = "/dashboard/app";
-      }, 500); 
       }
-    
     } catch (error: any) {
       console.log(error);
       enqueueSnackbar("Login Failed", {

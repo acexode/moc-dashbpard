@@ -1,5 +1,8 @@
 export  const  bhcpf = "bhcpf";
-export const app_title = "MOC BHCPF"
+export const app_title = "NPHCDA BHCPF"
+export const indicatorSettings = "indicator-settings"
+export const assessUrl = "assessments/m-and-e/count/all";
+
 export const roles = {
     super_admin:"super_admin",
     facility_web:"facility_web",
@@ -15,3 +18,6 @@ export const levels ={
     lga: "Lga",
     ward:"Ward"
 }
+
+export const qa_menu = 'http://161.35.141.60/BHCPF/access/1272-098291-0000-12837'
+export const hr_menu = 'http://161.35.141.60/BHCPF/access/1272-098291-0092-12837'

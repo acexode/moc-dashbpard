@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import React, { useMemo ,FC, useState, useEffect} from "react";
+import React, { useMemo, FC, useEffect, useState } from "react";
 
 //MRT Imports
 //import MaterialReactTable from 'material-react-table'; //default import deprecated
@@ -9,58 +9,92 @@ import { MaterialReactTable } from "material-react-table";
 //Material UI Imports
 import { darken } from "@mui/material";
 import { IselectedState } from "../../components/_dashboard/general-app/MainTable";
+import HandleExport from "./handleExport";
+import { defaultColumns } from "./defaultColumns";
+import useSettings from "../../hooks/useSettings";
+import { convertIndicators } from "../../utility/setStateFunc";
+import { mergeIndicatorsArrays } from "../../utility/mergeIndicators";
+import { levels } from "../../constants";
+import { getLgaData } from "../../utility";
 
+const HealthInformationTable: FC<{
+  selectedState: IselectedState;
+  userProfile: any;
+  tier: string;
+}> = ({  selectedState, userProfile, tier }) => {
+  const [healthData, setHealthData] = useState([]);
+  const {allTiersIndicators} = useSettings()
+  const [humanData, setHumanData] = useState([]);
+  const [columns, setcolumns] = useState([])
+  const stateAccessorKey = ['indicator25State']
+  const lgaAccessorKey = ['indicator25LGA']
+  const dynamicIndicators =  [
+      {
+        accessorKey: "",
+        header: "PHCs Submitting NHMIS Data",
+        size: 150,
+      },
+    ]
 
-//Mock Data
-// import { demographyData } from "../../data/demographyData";
+  
+    useEffect(() => {
+    console.log(allTiersIndicators);
+    const filteredTiersColumn = defaultColumns.filter((column) => {
+      // Filter out the "LGA" column if selectedState.state doesn't exist
+      if(selectedState.state){
+        return  column.accessorKey !== "state"
+      }
+      return column.accessorKey !== "lga"
+    });
+    const handleLgaData = () => {
+      const lgadata1 = getLgaData(allTiersIndicators.lga.indicator25Lga, selectedState.state)
+          
+      console.log({lgadata1});
+      const t25 = convertIndicators(lgadata1, "", tier, selectedState)
+     
 
-const HealthInformationTable:FC<{indicator:any,selectedState:IselectedState}> = ({indicator,selectedState}) => {
-  const [healthData,setHealthData] = useState([])
-  const columns = useMemo(() => [
-    {
-      accessorKey: "state", //access nested data with dot notation
-      header: "State",
-      size: 150,
-    },
-    {
-      accessorKey: "lga", //access nested data with dot notation
-      header: "LGA",
-      size: 150,
-    },
-    {
-      accessorKey: "indicator", //access nested data with dot notation
-      header: "PHCs that have submitted NHMIS Data",
-      size: 150,
-    },
-     {
-      accessorKey: "year",
-      header: "Year",
-      size: 150,
-    },
-    {
-      accessorKey: "quarter",
-      header: "Quarter",
-      size: 150,
-    },
-
- 
-  ].filter((column) => {
-    // Filter out the "LGA" column if selectedState.state doesn't exist
-    if(selectedState.state){
-      return  column.accessorKey !== "state"
+      const mergedArray = mergeIndicatorsArrays(['year', 'quarter', 'state', 'lga'], t25).map(e => ({
+          ...e,
+          indicator25LGA: Math.floor(e?.indicator25Lga * 100),
+         
+      }));
+      console.log(mergedArray);
+      const dcolumn = dynamicIndicators.map((e, i) => ({...e, accessorKey: lgaAccessorKey[i]}))
+      const col = [...filteredTiersColumn, ...dcolumn]
+      setcolumns(col)
+      setHealthData(mergedArray)
     }
-    return column.accessorKey !== "lga"
-  }));
+    console.log(allTiersIndicators);
+    if(allTiersIndicators){
 
-  useEffect(()=>{
-    if(indicator){
-      const dataArray = indicator?.map((dt) => ({
-        ...dt,
-        indicator: selectedState.state ? `${(dt?.indicator25Lga * 100).toFixed(1)}%`:  `${(dt?.indicator25State * 100).toFixed(1)}%`
-      }))
-      setHealthData(dataArray)
+      if(userProfile?.level === levels.national){
+        if(selectedState.national && !selectedState.state){
+          console.log(selectedState);
+          const t25 = convertIndicators(allTiersIndicators.state.indicator25State, "", tier, selectedState)
+          console.log({t25,  merged: mergeIndicatorsArrays( ['year', 'quarter', 'state'], t25, )});
+          const mergedArray = mergeIndicatorsArrays(['year', 'quarter', 'state'], t25 ).map(e => ({
+              ...e,
+              indicator25State: Math.floor(e?.indicator25State * 100),
+              
+          }));
+          setHealthData(mergedArray)
+          const dcolumn = dynamicIndicators.map((e, i) => ({...e, accessorKey: stateAccessorKey[i]}))
+          const col = [...filteredTiersColumn, ...dcolumn]
+          setcolumns(col)
+          console.log(mergedArray);
+        }
+        else if(selectedState.state){
+          console.log('state');
+         handleLgaData()
+          
+        }
+      }else{
+        console.log('National');
+        handleLgaData()
+      }
     }
-  },[indicator])
+    
+  }, [selectedState, allTiersIndicators]);
 
   return (
     <MaterialReactTable
@@ -81,6 +115,9 @@ const HealthInformationTable:FC<{indicator:any,selectedState:IselectedState}> = 
           },
         }),
       }}
+      renderTopToolbarCustomActions={({ table }) => (
+        <HandleExport table={table} columns={columns} data={healthData} tier={tier} />
+      )}
     />
   );
 };

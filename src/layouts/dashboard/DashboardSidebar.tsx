@@ -169,7 +169,7 @@ export default function DashboardSidebar({
                 color: "#fff",
               }}
             >
-              {/* NPHCDA BHCPF Platform */}
+              NPHCDA BHCPF Platform
             </Typography>
           </Box>
 
@@ -195,7 +195,7 @@ export default function DashboardSidebar({
               <MyAvatar />
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: "#fff" }}>
-                  {/* {userProfile?.name} */} Dr. Atteh Rhoda
+                  {userProfile?.name}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   {userProfile?.access}

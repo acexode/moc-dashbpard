@@ -23,6 +23,7 @@ import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { levels } from "../../../constants";
+import MocAxiosInstance from "../../../services/moc_service";
 
 
   interface IAddEditUser {
@@ -39,53 +40,25 @@ import { levels } from "../../../constants";
     lastName: yup.string().required("*Last Name  is required"),
     email: yup.string().email().required("Email Address is required"),
     // password: yup.string().required("*Password is required").min(8),
-    role: yup.string().required("*Role is required"),
+    // role: yup.string().required("*Role is required"),
     access: yup.string().required("*Access is required"),
-    level: yup.string().required("*Level is required"),
+    // level: yup.string().required("*Level is required"),
   });
   const access =[
     {
     access:"Admin",
-    id:"Admin"
+    id:"admin"
   },
     {
-    access:"RO",
-    id:"RO"
+    access:"Viewer",
+    id:"viewer"
   },
     {
-    access:"RW",
-    id:"RW"
+    access:"Super Admin",
+    id:"super-admin"
   },
 ]
-  const level =[
-    {
-    type:"National",
-    id:"National"
-  },
-    {
-    type:"State",
-    id:"State"
-  },
-    {
-    type:"Lga",
-    id:"Lga"
-  },
-    {
-    type:"Ward",
-    id:"Ward"
-  },
-]
-const roles = [
-    { id: "facility_web", name: 'Facility Web' },
-    { id: "lga_web", name: 'LGA Web' },
-    { id: "state_web", name: 'State Web' },
-    { id: "national_web", name: 'National Web' },
-    { id: "facility_app", name: 'Facility App' },
-    { id: "lga_app", name: 'LGA App' },
-    { id: "state_app", name: 'State App' },
-    { id: "super_admin", name: 'Super Admin' },
-    { id: "hrh_admin", name: 'HRH Admin' }
-  ]
+
 
 export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchAllUsers}) =>{
     const {
@@ -108,16 +81,12 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
       const [locationsLoading,setLocationsLoading] = useState(false)
       const { enqueueSnackbar, closeSnackbar } = useSnackbar();
       const [locations,setLocations] = useState([])
-      const [states,setStates] = useState([])
-      const [lgas,setLgas] = useState([])
-      const [stateId,setStateId] = useState("")
-      const [lgaId,setLgaId] = useState("")
-
-      const watchLevel = watch("level")
 
       useEffect(()=>{
           if(edit){
-            reset(formData)
+            const {password, ...others } = formData
+            console.log(others);
+            reset(others)
           }else{
             reset()
           }
@@ -128,52 +97,15 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
           const options = res?.data?.map((dt:any) =>{
             return {
               label: dt?.name,
-              id: dt?.id
+              id: dt?.id.toString()
             }
           })
-          if(watchLevel === levels.state || watchLevel === levels.national){
-            setLocations(options)
-          }else{
-            setStates(options)
-          }
+          setLocations(options)
         }).catch(error =>{
           console.log(error)
         })
-    },[watchLevel])
+    },[])
 
-      useEffect(()=>{
-        axiosInstance.get(`/locations/states/${stateId}`).then(res =>{
-          const options = res?.data?.map((dt:any) =>{
-            return {
-              label: dt?.name,
-              id: dt?.id
-            }
-          })
-          if(watchLevel === levels.lga){
-            setLocations(options)
-          }else if(watchLevel === levels.ward){
-            setLgas(options)
-          }
-        }).catch(error =>{
-          console.log(error)
-        })
-    },[stateId,watchLevel])
-
-      useEffect(()=>{
-        axiosInstance.get(`/locations/lgas/${lgaId}`).then(res =>{
-          const options = res?.data?.map((dt:any) =>{
-            return {
-              label: dt?.name,
-              id: dt?.id
-            }
-          })
-          if(watchLevel === levels.ward){
-            setLocations(options)
-          }
-        }).catch(error =>{
-          console.log(error)
-        })
-    },[lgaId,watchLevel])
 
     const handleToggle =() => toggle()
 
@@ -187,12 +119,12 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
           try {
             let res;
             if (edit) {
-              res = await axiosInstance.put(
-                `/users/${formData?.id}/update`,
+              res = await MocAxiosInstance.put(
+                `/users/${formData?.id}`,
                 newData
               );
             } else {
-              res = await axiosInstance.post(`/users/create`, newData);
+              res = await MocAxiosInstance.post(`/users`, newData);
             }
             enqueueSnackbar(`${text}`, {
                 variant: "success",
@@ -221,7 +153,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
     const handleAutocompleteChange = (event, value) => {
       setValue('locationId', value?.id || ''); // Set the value of 'locationId' field
     };
-  
+    console.log(register('password'));
     return (
         <Dialog
         open={modal}
@@ -277,36 +209,16 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
             <Grid item xs={12} sm={6} lg={6}>
                 <label>Password</label>
                 <TextField
-                    defaultValue={formData?.password}
+                    // defaultValue={formData?.password}
                     variant="outlined"
                     fullWidth
                     {...register('password')}
+                    defaultValue={""}
                     type="text"
                 />
                 
             </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Role</label>
-              <TextField
-                 variant="outlined"
-                fullWidth
-                 required
-                select
-                 type="number"
-                {...register("role")}
-               
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {roles?.map((role) => (
-                  <MenuItem value={role.id}>{role?.name}</MenuItem>
-                ))}
-              </TextField>
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.role?.message?.toString()}
-                </p>
-            </Grid>
+           
             <Grid item xs={12} sm={6} lg={6}>
             <label>Select Access</label>
               <TextField
@@ -328,47 +240,7 @@ export  const AddEditUser:FC<IAddEditUser> = ({edit,formData,modal,toggle,fetchA
                   {errors?.access?.message?.toString()}
                 </p>
             </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
-            <label>Select Level</label>
-              <TextField
-                 variant="outlined"
-                fullWidth
-                select
-                 type="number"
-                {...register("level")}
-               
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {level?.map((level) => (
-                  <MenuItem value={level.id}>{level.type}</MenuItem>
-                ))}
-              </TextField>
-                <p style={{ color: "red", fontSize: 12 }}>
-                  {errors?.level?.message?.toString()}
-                </p>
-            </Grid>
-           {(watchLevel === levels.lga || watchLevel === levels.ward) && <Grid item xs={12} sm={6} lg={6}>
-            <label>Select State</label>
-            <Autocomplete
-              options={states}
-              getOptionLabel={(option) => option.label}
-              onChange={(e,value) => setStateId(value.id)}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            
-            </Grid>}
-           {watchLevel === levels.ward && <Grid item xs={12} sm={6} lg={6}>
-            <label>Select LGA</label>
-            <Autocomplete
-              options={lgas}
-              getOptionLabel={(option) => option.label}
-              onChange={(e,value) => setLgaId(value.id)}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            
-            </Grid>}
+
             <Grid item xs={12} sm={6} lg={6}>
             <label>Select Location</label>
             <Autocomplete

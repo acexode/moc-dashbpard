@@ -5,51 +5,58 @@ import { FC, useEffect, useState } from "react";
 //
 // ----------------------------------------------------------------------
 import monIcon from "../../../assets/mon.svg";
-import { getColor } from "../../../utility";
-
+import { getColor, getIndicatorTier } from "../../../utility";
+import useSettings from "../../../hooks/useSettings";
+import { AllIndicators } from "../../settings/allIndicators";
+import TrendButton from "./TrendButton";
+import { DefaultState, getLiveIndicator, processIndicators } from "../../../utility/processIndicator";
+import NoData from "./NoData";
+const today = new Date();
+const cquarter = Math.floor((today.getMonth() + 3) / 3) - 1;
 interface IFinancial {
-  proportionSPHCB: any;
-  proportionPHC: any;
   tier: string;
-  state: string;
+  defualtState: DefaultState;
 }
 
 const FinancialCard: FC<IFinancial> = ({
-  proportionSPHCB,
-  proportionPHC,
   tier,
-  state,
+  defualtState
 }) => {
-  const [value, setValue] = useState();
-  const [phc, setPhc] = useState();
+  const {state, year, quarter, } = defualtState;
+  const { cachedIndicators, fetchedIndicators } = useSettings();
+  const [indicator, setindicator] = useState(null);
+  const [data, setdata] = useState([]);
+  const [noData, setnoData] = useState(true)
   useEffect(() => {
-    console.log(proportionPHC, proportionSPHCB);
-    if (proportionSPHCB && tier) {
-      const i =
-        tier === "State"
-          ? proportionSPHCB.filter((e) => e?.state === state)[0]
-          : proportionSPHCB[0];
-      if (i) {
-        setValue(i["indicator7" + tier] * 100)
-      } else {
-        setValue(0);
+    setnoData(true)
+    const settings = cachedIndicators;
+    if (settings && fetchedIndicators) {
+      const {ltype, liveIndicators} = getLiveIndicator(settings, AllIndicators, tier, 'finance');
+      const labelTier =getIndicatorTier(tier);
+      setindicator(ltype);
+      const processed =  processIndicators(
+        fetchedIndicators,
+        ltype,
+        liveIndicators,
+        year,
+        quarter,
+        labelTier,
+        state,
+        'finances'
+      );
+      // console.log({processed, liveIndicators, fetchedIndicators});
+      if(processed.length > 0){
+        setnoData(false)
+        setdata(processed)
+      }else{
+        setnoData(true)
       }
     }
-    if(proportionPHC && tier){
-      const p =
-        tier === "State"
-          ? proportionPHC?.filter((e) => e?.state === state)[0]
-          : proportionPHC[0];
-      console.log(p, p.indicator5State * 100);
-      if(p){
-        setPhc(p?.indicator5State * 100);
-      } else {
-        setPhc(0);
-      }
-    }
-  }, [proportionSPHCB]);
+  }, [fetchedIndicators, cachedIndicators]);
+
+
   return (
-    <Card className="card" style={{ height: "250px" }}>
+    <Card className="card" style={{ height: "308px" }}>
       <CardHeader
         title={
           <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
@@ -59,6 +66,9 @@ const FinancialCard: FC<IFinancial> = ({
             >
               Financial Management
             </Typography>
+            {indicator && (
+              <TrendButton indicator={indicator} title="Financial Management" />
+            )}
           </div>
         }
       />
@@ -68,51 +78,19 @@ const FinancialCard: FC<IFinancial> = ({
           justifyContent: "center",
           flexDirection: "column",
           alignItems: "center",
-          mt: 6,
+          mt: noData ? 1 : 6,
         }}
         px={3}
       >
-        {tier === "National" && (
+        {noData ? <NoData /> : data.map(d => (
           <>
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                gap: "0.5rem",
-                marginBottom: "0.5rem",
-              }}
-            >
-              {Array.from({ length: 10 }).map((_, index) => (
-                <>
-                {/* {phc} */}
-                  <div
-                    key={index}
-                    className="contentBox"
-                    style={{
-                      backgroundColor:
-                        index < phc / 10 ? getColor(phc) : "#D3D3D3",
-                    }}
-                  />
-                </>
-              ))}
-            </div>
-
-            <Typography
-              style={{ fontSize: "0.7rem", fontWeight: 400, color: "#525252" }}
-            >
-              <span style={{ color: getColor(100) }}>{parseInt(phc || 0)}%</span> SPHCB receiving
-              quarterly allocation
-            </Typography>
-          </>
-        )}
-
         <div
           style={{
             display: "flex",
             width: "100%",
             gap: "0.5rem",
             marginBottom: "0.5rem",
-            marginTop: "2rem",
+            marginTop: ".5rem",
           }}
         >
           {Array.from({ length: 10 }).map((_, index) => (
@@ -122,7 +100,7 @@ const FinancialCard: FC<IFinancial> = ({
                 className="contentBox"
                 style={{
                   backgroundColor:
-                    index < value / 10 ? getColor(value) : "#D3D3D3",
+                    index < d.value / 10 ? getColor(d.value) : "#D3D3D3",
                 }}
               />
             </>
@@ -133,11 +111,13 @@ const FinancialCard: FC<IFinancial> = ({
             fontSize: "0.7rem",
             fontWeight: 400,
             color: "#525252",
-            marginBottom: "1.5rem",
+            marginBottom: "1.2rem",
           }}
         >
-          {parseInt(value || 0)}% PHCs receiving quarterly allocation
+          {parseInt(d.value || 0)}% {d.label}
         </Typography>
+          </>
+        ))}
       </Box>
     </Card>
   );

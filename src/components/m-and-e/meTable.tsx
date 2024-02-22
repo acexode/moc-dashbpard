@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { filter } from "lodash";
 import { Icon } from "@iconify/react";
 import { useState, SetStateAction, FC, useEffect } from "react";
@@ -16,7 +18,8 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Skeleton
+  Skeleton,
+  Grid
 } from "@mui/material";
 
 // routes
@@ -35,6 +38,7 @@ import ViewDataModal from "./components/viewDataModal";
 // import { useAuthUserContext } from "../../context/authUser.context";
 import axiosInstance from "../../services/api_service";
 import { getObjectById } from "../../utility";
+import SelectInput from "../SelectInput";
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -90,10 +94,13 @@ interface ITable {
   page_title: string;
   loading?:boolean;
   show?:boolean;
-  setNeedle?:any
+  setNeedle?:any;
+  totalDataCount?:number;
+  selectedState?:any;
+  handleChange?:any
 }
 
-const METable: FC<ITable> = ({ dataList, page_title, table_Head,loading,show,setNeedle }) => {
+const METable: FC<ITable> = ({ dataList, page_title, table_Head,loading,show,setNeedle,totalDataCount,selectedState,handleChange }) => {
   const { themeStretch } = useSettings();
 
   const [page, setPage] = useState(0);
@@ -106,7 +113,6 @@ const METable: FC<ITable> = ({ dataList, page_title, table_Head,loading,show,set
   const [row, setRow] = useState<any>();
   const [title, setTitle] = useState<string>("");
   const [locations,setLocations] = useState([])
-
   useEffect(()=>{
     axiosInstance.get('locations').then(res =>{
       const options = res?.data?.map((dt:any) =>{
@@ -234,7 +240,11 @@ const METable: FC<ITable> = ({ dataList, page_title, table_Head,loading,show,set
       }
   },[filterName])
 
- 
+  const year = new Date().getFullYear();
+  const years = Array.from(new Array(10), (val, index) => year - index);
+  const q = [1, 2, 3, 4];
+
+
   return (
     <>
       <Page title={`${page_title}: List | BHCFP`}>
@@ -273,7 +283,29 @@ const METable: FC<ITable> = ({ dataList, page_title, table_Head,loading,show,set
               filterName={filterName}
               onFilterName={handleFilterByName}
             />
-
+           {page_title === "HF" && <Grid spacing={3} container px={3} pb={3}>
+                <Grid item xs={6}>
+                  <label>Year</label>
+                    <SelectInput
+                      name="year"
+                      defaultValue={selectedState.year}
+                      handleChange={handleChange}
+                      options={years}
+            
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                  <label>Quarter</label>
+                <SelectInput
+                      name="quarter"
+                      defaultValue={selectedState.quarter}
+                      handleChange={handleChange}
+                      options={q}
+                    />
+                </Grid>
+                
+              </Grid>
+          }
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table>
@@ -566,15 +598,15 @@ const METable: FC<ITable> = ({ dataList, page_title, table_Head,loading,show,set
               </TableContainer>
             </Scrollbar>
 
-            <TablePagination
+          {page_title !== "HF" &&  <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={dataList?.length}
+              count={totalDataCount ?? dataList?.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            />}
           </Card>
         </Container>
       </Page>

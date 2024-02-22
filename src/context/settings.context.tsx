@@ -1,11 +1,12 @@
 // @ts-nocheck
 
 import PropTypes from 'prop-types';
-import { createContext } from 'react';
+import { createContext, useState } from 'react';
 // hooks
 import useLocalStorage from '../hooks/useLocalStorage';
 // theme
 import palette from '../theme/palette';
+import { indicatorSettings } from '../constants';
 
 // ----------------------------------------------------------------------
 
@@ -107,12 +108,20 @@ const initialState = {
   themeDirection: 'ltr',
   themeColor: 'default',
   themeStretch: false,
+  handleIndicatorChange: (data: any) => {},
+  handleIndicatorUpdates: (data: any) => {},
+  handleShowTrendModal: (data: any) => {},
+  handleSelectedIndicator: (data: any) => {},
+  setfetchedIndicators: (data: any) => {},
+  setAllTierIndicators: (data: any) => {},
   onChangeMode: () => {},
   onChangeDirection: () => {},
   onChangeColor: () => {},
   onToggleStretch: () => {},
   setColor: PRIMARY_COLOR[0],
-  colorOption: []
+  colorOption: [],
+  trends: {},
+  selectedIndicator: []
 };
 
 const SettingsContext = createContext(initialState);
@@ -128,6 +137,13 @@ function SettingsProvider({ children }:any) {
     themeColor: initialState.themeColor,
     themeStretch: initialState.themeStretch
   });
+  const [indicatorUpdates, setindicatorUpdates] = useState(null)
+  const [cachedIndicators, setcachedIndicators] = useState(JSON.parse(localStorage.getItem(indicatorSettings)))
+  const [selectedIndicator, setselectedIndicator] = useState([])
+  const [selectedIndicatorTitle, setselectedIndicatorTitle] = useState("")
+  const [fetchedIndicators, setfetchedIndicators] = useState(null)
+  const [allTiersIndicators, setAllTierIndicators] = useState(null)
+  const [showTrendModal, setShowTrendModal] = useState(false)
 
   const onChangeMode = (event: { target: { value: any; }; }) => {
     setSettings({
@@ -156,6 +172,18 @@ function SettingsProvider({ children }:any) {
       themeStretch: !settings.themeStretch
     });
   };
+  const handleIndicatorChange = (val) => {
+    setcachedIndicators(val);
+  };
+  const handleShowTrendModal = (val) => {
+    setShowTrendModal(val);
+  };
+  const handleIndicatorUpdates = (val) => {
+    setindicatorUpdates(val);
+  };
+  const handleSelectedIndicator = (val) => {
+    setselectedIndicator(val);
+  };
 
   return (
     <SettingsContext.Provider
@@ -167,13 +195,26 @@ function SettingsProvider({ children }:any) {
         onChangeDirection,
         // Color
         onChangeColor,
+        handleIndicatorChange,
+        handleIndicatorUpdates,
+        handleSelectedIndicator,
+        selectedIndicator,
+        cachedIndicators,
+        indicatorUpdates,
         setColor: SetColor(settings.themeColor),
         colorOption: PRIMARY_COLOR.map((color) => ({
           name: color.name,
           value: color.main
         })),
-        // Stretch
-        onToggleStretch
+        onToggleStretch,
+        handleShowTrendModal,
+        showTrendModal,
+        fetchedIndicators,
+        setfetchedIndicators,
+        allTiersIndicators,
+        setAllTierIndicators,
+        selectedIndicatorTitle,
+        setselectedIndicatorTitle
       }}
     >
       {children}

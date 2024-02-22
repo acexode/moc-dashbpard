@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useState } from "react";
+import  { FC, useEffect, useState } from "react";
 import METable from "../../components/m-and-e/meTable";
 import { useAuthUserContext } from "../../context/authUser.context";
 import axiosInstance from "../../services/api_service";
 import {  handleFormatData2 } from "../../utility/dataFormatter";
-import { levels, roles } from "../../constants";
+import { levels } from "../../constants";
 
 const TABLE_HEAD = [
   { id: "stateLocation", label: "State", alignRight: false },
@@ -45,7 +45,7 @@ const LGA: FC = () => {
       page_title="LGA"
       table_Head={TABLE_HEAD}
       loading={loading}
-      show={userProfile?.role !== roles.state_web}
+      show={userProfile?.level !== levels.ward}
     />
   );
 };

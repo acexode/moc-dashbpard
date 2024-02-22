@@ -3,12 +3,16 @@ export interface IServiceCard{
   value: number | string,
   sub?: number | string,
   subTitle?: number | string,
+  icon?: string,
+  showFCT?: boolean,
   title: string,
   color:string ,
   classname?: number | string,
   show?:boolean
   isString?:boolean,
   path?:string
+  user?:string,
+  isMoney?:boolean
 }
 
 export interface IGovernaceStructure {

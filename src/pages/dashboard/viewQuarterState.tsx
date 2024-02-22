@@ -12,7 +12,7 @@ import {
   Button
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import editOutline from '@iconify/icons-eva/edit-outline';
 
 import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
@@ -168,11 +168,13 @@ useEffect(()=>{
                         {`${item?.serial}  ${item?.question}`}
                       </Typography>} 
                       secondary={
-                        <Typography sx={{color:"#7b939c"}} >Response: {Array.isArray(item?.response)
-                          ? item?.response.length > 0
-                            ? item?.response.join(", ")
-                            : "Not Available"
-                          : item?.response || "Not Available"}</Typography>
+                        <Typography sx={{color:"#7b939c"}} >
+                          Response: {Array.isArray(item?.response)
+                            ? item?.response.length > 0
+                              ? item?.response.filter(Boolean).join(", ")
+                              : "Not Available"
+                            : item?.response || "Not Available"}
+                        </Typography>
                       } />
                     </ListItem>
                   ))}

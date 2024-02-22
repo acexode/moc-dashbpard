@@ -12,7 +12,7 @@ import { SettingsProvider } from './context/settings.context';
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  // <React.StrictMode>
      <HelmetProvider>
         <SettingsProvider>
           <BrowserRouter>
@@ -20,5 +20,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           </BrowserRouter>
         </SettingsProvider>
      </HelmetProvider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )

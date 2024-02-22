@@ -21,6 +21,7 @@ function path(root: string, sublink: string) {
     root: ROOTS_DASHBOARD,
     general: {
       app: path(ROOTS_DASHBOARD, '/app'),
+      nphcda: path(ROOTS_DASHBOARD, '/nphcda'),
       
     },
     m_and_e: {
@@ -34,12 +35,22 @@ function path(root: string, sublink: string) {
       viewAssessment: path(ROOTS_DASHBOARD, '/m-and-e/view-assessment'),
       viewStateAssessment: path(ROOTS_DASHBOARD, '/m-and-e/view-state-assessment'),
       viewHFAssessment: path(ROOTS_DASHBOARD, '/m-and-e/view-hf-assessment'),
+      viewProgressReport:path(ROOTS_DASHBOARD, '/m-and-e/progress-report'),
+    },
+    financial_management: {
+      root: path(ROOTS_DASHBOARD, '/financial_management'),
+      dashboard: path(ROOTS_DASHBOARD, '/financial_management/dashboard'),
+      business_plan: path(ROOTS_DASHBOARD, '/financial_management/business_plan'),
+      retirement: path(ROOTS_DASHBOARD, '/financial_management/retirement'),
+      viewLgaPlan: path(ROOTS_DASHBOARD, '/financial_management/viewLgaPlan'),
+      viewRetirement: path(ROOTS_DASHBOARD, '/financial_management/viewRetirement'),
     },
     settings: {
       root: path(ROOTS_DASHBOARD, '/settings'),
       userManagement: path(ROOTS_DASHBOARD, '/settings/user'),
       facilityManagement: path(ROOTS_DASHBOARD, '/settings/facility'),
       questionsManagement: path(ROOTS_DASHBOARD, '/settings/questions'),
+      MocKPIManagement: path(ROOTS_DASHBOARD, '/settings/moc-kpi'),
       wardsSettings: path(ROOTS_DASHBOARD, '/settings/wards'),
     },
    

@@ -112,7 +112,9 @@ const Form: FC<IForm> = ({ questions,type}) => {
             const index = mainQuestions["1"].indexOf(removedObj);
     
             // Insert the removedObj back into the newQuestions array at the same index
-            filteredObj["1"].splice(index, 0, removedObj);
+            if (!filteredObj["1"].some(obj => obj.id === removedObj.id)) {
+              filteredObj["1"].splice(index, 0, removedObj);
+            }
           }
         }
         setNewQuestions(filteredObj);
@@ -134,8 +136,10 @@ const Form: FC<IForm> = ({ questions,type}) => {
             // Find the index of the removedObj in the original array
             const index = mainQuestions["1"].indexOf(removedObj);
     
-            // Insert the removedObj back into the newQuestions array at the same index
-            filteredObj["1"].splice(index, 0, removedObj);
+            // Check if the object already exists in the array before inserting
+            if (!filteredObj["1"].some(obj => obj.id === removedObj.id)) {
+              filteredObj["1"].splice(index, 0, removedObj);
+            }
           }
         }
         setNewQuestions(filteredObj);
@@ -163,7 +167,9 @@ const Form: FC<IForm> = ({ questions,type}) => {
     
             // Insert the removedObjs back into the newQuestions array at the corresponding indices
             indices.forEach((index, idx) => {
-              filteredObj["1"].splice(index + idx, 0, removedObjs[idx]);
+              if (!filteredObj["1"].some(obj => obj.id === removedObjs[idx].id)) {
+                filteredObj["1"].splice(index + idx, 0, removedObjs[idx]);
+              }
             });
           }
         }
@@ -192,7 +198,9 @@ const Form: FC<IForm> = ({ questions,type}) => {
     
             // Insert the removedObjs back into the newQuestions array at the corresponding indices
             indices.forEach((index, idx) => {
-              filteredObj["3"].splice(index + idx, 0, removedObjs[idx]);
+              if (!filteredObj["3"].some(obj => obj.id === removedObjs[idx].id)) {
+                filteredObj["3"].splice(index + idx, 0, removedObjs[idx]);
+              }
             });
           }
         }
@@ -220,7 +228,9 @@ const Form: FC<IForm> = ({ questions,type}) => {
     
             // Insert the removedObjs back into the newQuestions array at the corresponding indices
             indices.forEach((index, idx) => {
-              filteredObj["3"].splice(index + idx, 0, removedObjs[idx]);
+              if (!filteredObj["3"].some(obj => obj.id === removedObjs[idx].id)) {
+                filteredObj["3"].splice(index + idx, 0, removedObjs[idx]);
+              }
             });
           }
         }

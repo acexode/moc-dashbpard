@@ -3,17 +3,18 @@
 import { FC, useEffect, useState } from "react";
 
 // material
-import {
-  Card,
-  Typography,
-  CardHeader,
-  Grid,
-  Box,
-} from "@mui/material";
+import { Card, Typography, CardHeader, Grid, Box } from "@mui/material";
 // utils
 import govIcon from "../../../assets/Governance.svg";
 import { IGovernaceStructure, IGovernaceStructure2 } from "../../../db/types";
 import ReactApexChart from "react-apexcharts";
+import { getColor, getIndicatorTier, getLightColor } from "../../../utility";
+import { indicatorSettings } from "../../../constants";
+import { AllIndicators } from "../../settings/allIndicators";
+import useSettings from "../../../hooks/useSettings";
+import TrendButton from "./TrendButton";
+import { DefaultState, getLiveIndicator, processIndicators } from "../../../utility/processIndicator";
+import NoData from "./NoData";
 
 // ----------------------------------------------------------------------
 
@@ -22,75 +23,92 @@ import ReactApexChart from "react-apexcharts";
 interface ISettlementReportTable {
   data?: IGovernaceStructure[];
   data2?: IGovernaceStructure2[];
-  data3?:any;
-  state: string
-  tier: string
+  data3?: any;
+  data4?: any;
+  defualtState: DefaultState;
+  tier: string;
 }
 
-const GovernmentStructure: FC<ISettlementReportTable> = ({ data=[], data2=[],data3 = [], state, tier }) => {
-const [value,setValue] = useState()
-const [value2,setValue2] = useState()
-const [value3,setValue3] = useState()
-useEffect(()=>{
-    if(data || data2){
-      const i = tier === 'State' ? data.filter(e => e?.state === state)[0] : data[0]
-      if(i){
-        setValue((i['indicator3' + tier] *
-          100).toFixed(0))
+const today = new Date();
+const cquarter = Math.floor((today.getMonth() + 3) / 3) - 1;
+
+const GovernmentStructure: FC<ISettlementReportTable> = ({
+  defualtState,
+  tier,
+}) => {
+  const {state, year, quarter, } = defualtState;
+  const {cachedIndicators, fetchedIndicators  } = useSettings()
+  const [values, setvalues] = useState([])
+  const [indicator, setindicator] = useState(null);
+  const [noData, setnoData] = useState(true)
+  useEffect(() => {
+    setnoData(true)
+    const settings = cachedIndicators;
+    if (settings && fetchedIndicators) {
+      const {ltype, liveIndicators} = getLiveIndicator(settings, AllIndicators, tier, 'governance');
+      const labelTier =getIndicatorTier(tier);
+      const processed =  processIndicators(
+        fetchedIndicators,
+        ltype,
+        liveIndicators,
+        year,
+        quarter,
+        labelTier,
+        state,
+        'governance'
+      );
+      if(processed.length > 0){
+        setnoData(false)
+        setvalues(processed)
+        setindicator(ltype)
+
       }else{
-        setValue(0)
+        setnoData(true)
       }
-       
-        setValue2((data2[0]?.indicator1National * 100).toFixed(0))
-        setValue3((data3[0]?.indicator2National * 100).toFixed(0))
-    }
-},[data,data2])
-  const chartData = {
-    options: {
-      colors: ['#25b76e'], 
-    
-      legend: {
-        position: 'bottom', // Place the legend at the bottom
-      },
-      labels: ['Proportion of states with functional coordination platforms established at state level'],
-      dataLabels: {
-        enabled: false, // Disable data labels on the slices
-      },
+   }
+  }, [cachedIndicators, fetchedIndicators]);
 
-    },
-    series: [70], // Replace with your data values
-  };
-
+  const convertToNumber = (e) => Math.floor(e * 100)
   return (
-    <Card className="card" style={{height: '250px'}}>
-       <CardHeader style={{paddingBottom: '2px'}} title={
-        <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-           <img src={govIcon} alt="" />
-        <Typography style={{ fontSize: '0.9rem', fontWeight:500, color:"#212B36" }}>
-        Governance
-        </Typography>
-
-        </div>
-      }  />
-      <Box sx={{px:2,mt:1}}>
-       {tier === 'National' && <div className="boxContainer">
-          <Typography style={{ fontSize: '0.8rem', fontWeight:400, color:"#525252" }}>State Support Funding</Typography>
-            <div className="badge">
-            {value2 >= 0 ? value2: ''}%
+    <Card className="card" style={{ height: "308px" }}>
+      <CardHeader
+        style={{ paddingBottom: "2px" }}
+        title={
+          <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+            <img src={govIcon} alt="" />
+            <Typography
+              style={{ fontSize: "0.9rem", fontWeight: 500, color: "#212B36" }}
+            >
+              Governance
+            </Typography>
+            <TrendButton indicator={indicator} title="Governance" />
+          </div>
+        }
+      />
+      <Box sx={{ px: 2, mt: values.length === 3 ? 1 : 5 }}>
+        {noData ? <NoData/> : values.map(v => (
+          <div className="boxContainer">
+            
+            <Typography
+              style={{ fontSize: "0.8rem", fontWeight: 400, color: "#525252" }}
+            >
+             {v.label}
+            </Typography>
+            <div
+              className="badge"
+              style={{
+                background: `#fff`,
+                border: `2px solid #f1f1f1`,
+                color: `${getColor(v[v.indicatorName])}`,
+              }}
+            >
+              {v.value}%
             </div>
-       </div>}
-       {tier === 'National' && <div className="boxContainer">
-          <Typography style={{ fontSize: '0.8rem', fontWeight:400, color:"#525252" }}>State Coordination Platforms</Typography>
-            <div className="badge">
-            {value3 >= 0 ? value3: ''}%
-            </div>
-       </div>}
-       <div style={{marginTop: `${tier !== 'National' ? '30%' : ''}`}} className="boxContainer">
-          <Typography style={{ fontSize: '0.8rem', fontWeight:400, color:"#525252" }}>LGA Coordination Platforms</Typography>
-            <div className="badge">
-            { value >= 0 ? value: '' }%
-            </div>
-       </div>
+          </div>
+        ))}
+       
+     
+        {/* <button onClick={()=> console.log(value4)}>Click</button> */}
       </Box>
     </Card>
   );

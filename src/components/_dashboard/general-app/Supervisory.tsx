@@ -1,80 +1,65 @@
 // @ts-nocheck
 
 import { FC, useEffect, useState } from "react";
-
+import GaugeChart from "react-gauge-chart";
 // material
 import { Card, Typography, CardHeader, Box, Divider } from "@mui/material";
 // utils
 import ReactApexChart from "react-apexcharts";
 import superIcon from "../../../assets/super.svg";
-import { getColor } from "../../../utility";
+import { getColor, getIndicatorTier } from "../../../utility";
+import { AllIndicators } from "../../settings/allIndicators";
+import { indicatorSettings } from "../../../constants";
+import useSettings from "../../../hooks/useSettings";
+import TrendButton from "./TrendButton";
+import { DefaultState, getLiveIndicator, processIndicators } from "../../../utility/processIndicator";
+import NoData from "./NoData";
 
 interface ISupervisory {
-  supportiveSupervision: any;
+  defualtState: DefaultState;
   tier: string;
 }
+const today = new Date();
+const cquarter = Math.floor((today.getMonth() + 3) / 3) - 1;
 
-const Supervisory: FC<ISupervisory> = ({ supportiveSupervision, tier }) => {
+const Supervisory: FC<ISupervisory> = ({ tier, defualtState }) => {
+  const {state, year, quarter, } = defualtState;
   const [value, setValue] = useState();
-  console.log(supportiveSupervision);
-  useEffect(() => {
-    if (supportiveSupervision) {
-      setValue(parseInt(supportiveSupervision[0]?.indicator32National * 100));
-    }
-  }, [supportiveSupervision]);
-  const chartData = {
-    options: {
-      colors: [getColor(value)],
+  const [label, setlabel] = useState("");
+  const { cachedIndicators, fetchedIndicators } = useSettings();
+  const [indicator, setindicator] = useState(null);
+  const [noData, setnoData] = useState(true)
 
-      legend: {
-        position: "bottom", // Place the legend at the bottom
-      },
-      plotOptions: {
-        radialBar: {
-          hollow: {
-            margin: 10,
-            size: "60%",
-            background: getColor(value),
-          },
-          track: {
-            dropShadow: {
-              enabled: true,
-              top: 2,
-              left: 0,
-              blur: 4,
-              opacity: 0.15,
-            },
-          },
-          dataLabels: {
-            name: {
-              show: false,
-            },
-            value: {
-              color: "#fff",
-              fontSize: "20px",
-              show: true,
-              offsetY: 7,
-              formatter: function (val) {
-                return val ? val + "%" : 0;
-              },
-            },
-          },
-        },
-      },
-      // fill: {
-      //   type: "gradient",
-      //   gradient: {
-      //     shade: "dark",
-      //     type: "vertical",
-      //     gradientToColors: ["#E9B601"],
-      //     stops: [0, 100]
-      //   }
-      // },
-    },
-    series: [value], // Replace with your data values
-  };
+  useEffect(() => {
+    setnoData(true)
+    const settings = cachedIndicators;
+    if (settings && fetchedIndicators) {
+      // console.log(settings, tier);
+      const {ltype, liveIndicators} = getLiveIndicator(settings, AllIndicators, tier, 'supervision');
+      setindicator(ltype);
+      const labelTier = getIndicatorTier(tier);
+      const processed = processIndicators(
+        fetchedIndicators,
+        ltype,
+        liveIndicators,
+        year,
+        quarter,
+        labelTier,
+        state,
+        "supervision"
+      );
+      if (processed.length > 0) {
+        setnoData(false)
+        setlabel(processed[0].label);
+        setValue(processed[0].value);
+      }else{
+        setnoData(true);
+      }
+    }
+  }, [fetchedIndicators, cachedIndicators]);
+
   return (
-    <Card className="card" style={{ height: "250px" }}>
+    <Card className="card" style={{ height: "308px" }}>
       <CardHeader
         title={
           <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
@@ -84,6 +69,9 @@ const Supervisory: FC<ISupervisory> = ({ supportiveSupervision, tier }) => {
             >
               Supervision
             </Typography>
+            {indicator && (
+              <TrendButton indicator={indicator} title="Supervision" />
+            )}
           </div>
         }
       />
@@ -96,6 +84,27 @@ const Supervisory: FC<ISupervisory> = ({ supportiveSupervision, tier }) => {
           alignItems: "center",
         }}
       >
+        {noData ?
+        <NoData />
+        : <>
+        
+        <div style={{ width: "200px", marginTop: "10px" }}>
+          {}
+          {/* {value && tier === "National" && ( */}
+            <GaugeChart
+              id="gauge-chart5"
+              nrOfLevels={420}
+              arcsLength={[value, 100 - value]}
+              colors={[getColor(value), "#ECF0FD"]}
+              percent={value / 100}
+              arcPadding={0.02}
+              textColor="#000"
+              needleColor={getColor(value)}
+              needleBaseColor="#000"
+            />
+          {/* )} */}
+        </div>
+
         <Typography
           style={{
             fontSize: "12px",
@@ -107,21 +116,15 @@ const Supervisory: FC<ISupervisory> = ({ supportiveSupervision, tier }) => {
           px={2}
         >
           {tier === "National" && (
-            <span style={{ fontWeight: 600, color: getColor(value) }}> {value}%</span>
-          )}
-          {' '}Supervisory Visits Conducted by States (SPHCB/A) to PHCs
+            <span style={{ fontWeight: 600, color: getColor(value) }}>
+              {" "}
+              {value}%
+            </span>
+          )}{" "}
+          {label}
         </Typography>
-
-        <div style={{ width: "200px" }}>
-          {}
-          {value && tier === "National" && (
-            <ReactApexChart
-              options={chartData.options}
-              series={chartData.series}
-              type="radialBar"
-            />
-          )}
-        </div>
+        </>
+      }
       </Box>
     </Card>
   );

@@ -1,17 +1,17 @@
 // @ts-nocheck
 
-import { Box, Card, CardHeader, Grid, Typography } from '@mui/material';
+import { Box, Card, CardHeader, Typography } from '@mui/material';
 import { FC } from 'react'
 import LineChart from './LineChart';
 
-const Trend:FC= () => {
+const Trend:FC<{title?:string}> = ({title="Service Utilisation (Coming Soon)"}) => {
   
   return (
     <Card>
       <CardHeader
         title={
           <Typography style={{ fontSize: '0.9rem', fontWeight:500, color:"#212B36" }}>
-            Service Utilisation (Coming Soon)
+            {title}
         </Typography>}
       />
       <Box sx={{display:"flex", justifyContent:"center" }}>

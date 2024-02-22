@@ -6,6 +6,7 @@ import ScrollToTop from './components/ScrollToTop';
 import ThemePrimaryColor from './components/ThemePrimaryColor';
 import { AuthUserProvider } from './context/authUser.context';
 import { useEffect } from 'react';
+import Settings from './layouts/dashboard/settings';
 
 
 function App() {
@@ -25,10 +26,10 @@ function App() {
       <ThemePrimaryColor>
         <NotistackProvider>
         <AuthUserProvider>
+         
         <ScrollToTop />
             <Router />
             </AuthUserProvider>
-         
         </NotistackProvider>
       </ThemePrimaryColor>
     </ThemeConfig>

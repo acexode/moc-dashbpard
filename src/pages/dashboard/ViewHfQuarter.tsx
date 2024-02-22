@@ -25,7 +25,7 @@ import {
     const [loading,setLoading] = useState(true)
 
     const {
-      state: { row, rowQ, page_title,rowTitle },
+      state: { row },
     } = useLocation();
     useEffect(() => {
       if(row){
@@ -65,15 +65,15 @@ import {
       <Page title={`Quarter based Data: List | BHCFP`}>
         <Container maxWidth={themeStretch ? false : "lg"}>
           <HeaderBreadcrumbs
-            heading={`${page_title}`}
+            heading={`HF`}
             links={[
               { name: "Dashboard", href: PATH_DASHBOARD.root },
-              { name: `${page_title}`, href: PATH_DASHBOARD.m_and_e.hf },
+              { name: `HF`, href: PATH_DASHBOARD.m_and_e.hf },
               { name: "List" },
             ]}
           />
           <Typography variant="h6" component="div">
-            {`${row?.facility || "Not Available"} M&E Assessment for ${rowTitle} ${row?.year}`}
+            {`${row?.facility || "Not Available"} M&E Assessment for ${row?.quarter} ${row?.year} (${row?.stateLocation} - ${row?.lgaLocation} - ${row?.wardLocation})`}
           </Typography>
           {loading ? <Grid container spacing={3} mt={1}>
           {dummyData?.map((cont: any, index: number) => (
