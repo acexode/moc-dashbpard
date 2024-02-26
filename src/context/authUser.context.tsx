@@ -68,19 +68,19 @@ const AuthUserProvider = ({ children }: Props) => {
         email: "super-admin@demo.com",
         password: "password89!",
       };
-      const mocResponse = await axios.post(`${MOC_BASE_URL}/auth/login`, data);;
-      const res = await axios.post(`${BASE_URL}/auth/login`, bhcpfdata);
-      if(mocResponse.data && res.data){
-        tokenService.setToken(res.data?.token);
-        tokenService.setUser(JSON.stringify(res.data?.user));
-        tokenService.setMOCToken('Bearer ' + mocResponse.data.token)
-        tokenService.setMOCUser(JSON.stringify(mocResponse.data.user))
-        console.log(mocResponse.data);
+      const res = await axios.post(`${MOC_BASE_URL}/auth/login`, data);;
+      // const res = await axios.post(`${BASE_URL}/auth/login`, bhcpfdata);
+      if(res.data){
+        tokenService.setToken(res.data?.proxyUser?.token);
+        tokenService.setUser(JSON.stringify(res.data?.proxyUser?.user));
+        tokenService.setMOCToken('Bearer ' + res.data.token)
+        tokenService.setMOCUser(JSON.stringify(res.data.user))
+        console.log(res.data);
         dispatch({
           type: userActions.SIGN_IN,
-          payload: res?.data,
+          payload: res?.data?.proxyUser,
         });
-        if (res?.data?.user?.role === roles.facility_app) {
+        if (res?.data?.proxyUser?.user?.role === roles.facility_app) {
           enqueueSnackbar(
             "User cannot sign in to app with role of Facility App",
             {

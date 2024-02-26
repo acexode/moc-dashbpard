@@ -63,6 +63,7 @@ const LoginForm:FC = () => {
             autoComplete="username"
             type="email"
             label="Email address"
+            sx={{color: '#fff', background: 'white'}}
             {...register('email')}
              helperText={errors?.email?.message?.toString()}
              FormHelperTextProps={{
