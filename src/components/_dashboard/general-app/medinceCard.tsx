@@ -32,15 +32,12 @@ const MedicineCard: FC<{
   useEffect(() => {
     const settings = cachedIndicators;
     setnoData(true)
-    console.log(year, quarter);
-    console.log(settings);
     // console.log({fetchedIndicators, year, quarter});
     if (settings && fetchedIndicators) {
       // console.log(object);
       const essentialMed = getLiveIndicator(settings, AllIndicators, tier, 'essentialMed');
       const ssd = getLiveIndicator(settings, AllIndicators, tier, 'ssd');
       const liveIndicators = [...essentialMed.liveIndicators, ...ssd.liveIndicators]
-      console.log(liveIndicators);
       const ltype = essentialMed.ltype
       setindicator(ltype);
       const labelTier = getIndicatorTier(tier);

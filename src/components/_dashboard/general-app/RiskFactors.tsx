@@ -48,9 +48,7 @@ const RiskFactors: FC<{
       const {year, quarter} = getYearAndQuarter()
       const yearQuarter = year + 'Q' + quarter
       const response = await getDHISData();
-      console.log(response);
       const seriesData = response.data[0].filter((r) => ids.includes(r.dataElementId) && r.period === yearQuarter).map(e => e.sumValue);
-      console.log(seriesData, yearQuarter);
       setseries([
         {
           data: seriesData,
