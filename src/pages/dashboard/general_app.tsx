@@ -250,7 +250,7 @@ const GeneralApp: FC = () => {
               defualtState={selectedState}
               color="#e8e0f2"
               icon="nurse-midwife"
-              title="Nurses and Midwives"
+              title="Nurses and Midwives  deployed by SPHCB/LGA"
             />
           </Grid>
 
@@ -260,7 +260,7 @@ const GeneralApp: FC = () => {
               defualtState={selectedState}
               color="#d6eccf"
               icon="comm"
-              title="Community Health Influencers and Promoters (CHIPS)"
+              title="CHEWS  deployed by SPHCB/LGA"
             />
           </Grid>
           <Grid item xs={12} md={6} sm={6} lg={6}>

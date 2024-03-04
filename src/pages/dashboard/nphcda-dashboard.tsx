@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Container, Grid } from "@mui/material";
+import {  Container, Grid } from "@mui/material";
 
 import { useAuthUserContext } from "../../context/authUser.context";
 import { IServiceCard } from "../../db/types";
@@ -36,9 +36,12 @@ import TrendsModal from "../../components/_dashboard/general-app/TrendsModal";
 import useSettings from "../../hooks/useSettings";
 import ServiceCardNPHCDA from "../../components/_dashboard/general-app/ServiceCard-NPHCDA";
 import Settings from "../../layouts/dashboard/settings";
+import Logo from "../../components/Logo";
+import NoticeBackdrop from "../../components/_dashboard/general-app/NoticeBackdrop";
 
 const NPHCDADashboard: FC = () => {
-  const { themeStretch, setfetchedIndicators, setAllTierIndicators } = useSettings();
+  const { themeStretch, setfetchedIndicators, setAllTierIndicators } =
+    useSettings();
   const [totalLgas, setTotalLgas] = useState(0);
   const [totalFacilities, setFacilities] = useState(0);
   const [totalStateAssessed, setTotalStateAssessed] = useState<any>(null);
@@ -57,7 +60,7 @@ const NPHCDADashboard: FC = () => {
   const [lgalocationUrl, setlgalocationUrl] = useState<any>();
   const [hflocationUrl, sethflocationUrl] = useState<any>();
   const [facilityUrl, setfacilityUrl] = useState<any>();
-  const {year, quarter} = getYearAndQuarter()
+  const { year, quarter } = getYearAndQuarter();
   const [selectedState, setSelectedState] = useState({
     national: "National",
     state: "",
@@ -66,7 +69,9 @@ const NPHCDADashboard: FC = () => {
     quarter,
   });
 
-  const { userState: { userProfile } } = useAuthUserContext();
+  const {
+    userState: { userProfile },
+  } = useAuthUserContext();
 
   useEffect(() => {
     setuserData(userProfile);
@@ -175,8 +180,12 @@ const NPHCDADashboard: FC = () => {
   }, []);
   useEffect(() => {
     if (meIndicators) {
-      const categories = categorizeIndicators(meIndicators, lgaindicators, indicators)
-      setAllTierIndicators(categories)
+      const categories = categorizeIndicators(
+        meIndicators,
+        lgaindicators,
+        indicators
+      );
+      setAllTierIndicators(categories);
       if (selectedState.lga) {
         settier("Lga");
       } else if (selectedState.state && !selectedState.lga) {
@@ -209,6 +218,7 @@ const NPHCDADashboard: FC = () => {
   return (
     <Page title="General: App | BHCPF">
       <Container maxWidth={themeStretch ? false : "xl"}>
+        <NoticeBackdrop />
         <Grid container spacing={2}>
           {assessmentData?.map((dt, index) => (
             <Grid item xs={12} md={3} key={index}>
@@ -282,8 +292,5 @@ const NPHCDADashboard: FC = () => {
     </Page>
   );
 };
-
-
-
 
 export default NPHCDADashboard;

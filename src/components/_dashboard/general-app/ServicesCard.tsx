@@ -130,10 +130,10 @@ const ServicesCard: FC<IServiceCard> = ({
           <Typography style={{ fontSize: "10px" }} variant="span">
             {!loading ? (
               <>
-                {subTitle} {sub}{" "}
-                {showFCT && (
+                {subTitle}
+                {/* {showFCT && (
                   <span>{user.level === "National" && "(including FCT)"}</span>
-                )}
+                )} */}
               </>
             ) : (
               <Skeleton variant="rectangular" width={100} height={30} />

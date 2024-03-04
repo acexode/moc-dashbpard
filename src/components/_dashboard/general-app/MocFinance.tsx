@@ -18,18 +18,17 @@ import {
 import NoData from "./NoData";
 import styled from "@emotion/styled";
 
-
-const IconContainer = styled("div")(({  }) => ({
+const IconContainer = styled("div")(({}) => ({
   position: "absolute",
   left: "15%",
   top: "12%",
   width: "100px",
   height: "100px",
   borderRadius: "50%",
-  backgroundColor:  "#F5F8FE" ,
+  backgroundColor: "#F5F8FE",
   display: "flex",
   justifyContent: "center",
-  alignItems: "center"
+  alignItems: "center",
 }));
 
 const MocFinance: FC<{
@@ -37,20 +36,25 @@ const MocFinance: FC<{
 
   tier: string;
 }> = ({ tier, defualtState }) => {
-  const {state, year, quarter, } = defualtState;
+  const { state, year, quarter } = defualtState;
   const { cachedIndicators, fetchedIndicators } = useSettings();
   const [indicator, setindicator] = useState(null);
   const [data, setdata] = useState({});
 
-  const [noData, setnoData] = useState(true)
+  const [noData, setnoData] = useState(true);
   useEffect(() => {
     // setnoData(true)
     const settings = cachedIndicators;
     if (settings && fetchedIndicators) {
-      const {ltype, liveIndicators} = getLiveIndicator(settings, AllIndicators, tier, 'finance');
-      const labelTier =getIndicatorTier(tier);
+      const { ltype, liveIndicators } = getLiveIndicator(
+        settings,
+        AllIndicators,
+        tier,
+        "finance"
+      );
+      const labelTier = getIndicatorTier(tier);
       setindicator(ltype);
-      const processed =  processIndicators(
+      const processed = processIndicators(
         fetchedIndicators,
         ltype,
         liveIndicators,
@@ -58,20 +62,17 @@ const MocFinance: FC<{
         quarter,
         labelTier,
         state,
-        'finances'
+        "finances"
       );
-      console.log({processed, liveIndicators, fetchedIndicators});
-      const labels = processed.map(e => e.label)
-      if(processed.length > 0){
-        
-        const series =processed.map(e => e.value)
-      
+      const labels = processed.map((e) => e.label);
+      if (processed.length > 0) {
+        const series = processed.map((e) => e.value);
+
         setdata({
           series: series,
           options: {
-            
             labels: labels,
-        
+
             colors: ["#f94f4f", "#1b3568"],
             responsive: [
               {
@@ -88,15 +89,13 @@ const MocFinance: FC<{
               },
             ],
           },
-        } )
-        setnoData(false)
-      }else{
-        setnoData(true)
+        });
+        setnoData(false);
+      } else {
+        setnoData(true);
       }
     }
   }, [fetchedIndicators, cachedIndicators]);
-
-
 
   return (
     <Card style={{ height: "308px", paddingBottom: "10px" }} className="card">
@@ -132,11 +131,10 @@ const MocFinance: FC<{
                 width: "500px",
                 height: "500px",
                 position: "relative",
-               
               }}
             >
               <IconContainer>
-               <img style={{width: '50px'}} src={walletIcon} />
+                <img style={{ width: "50px" }} src={walletIcon} />
               </IconContainer>
               <ReactApexChart
                 options={data?.options}

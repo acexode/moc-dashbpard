@@ -35,7 +35,7 @@ const MocNursesMidWife: FC<{
     setnoData(true)
     const settings = cachedIndicators;
     if(settings && fetchedIndicators){
-      const {ltype, liveIndicators} = getLiveIndicator(settings, AllIndicators, tier, 'cl');
+      const {ltype, liveIndicators} = getLiveIndicator(settings, AllIndicators, tier, 'hr');
       setindicator(ltype)
       const labelTier = getIndicatorTier(tier);
       const processed =  processIndicators(
@@ -46,11 +46,17 @@ const MocNursesMidWife: FC<{
         quarter,
         labelTier,
         state,
-        'cl'
+        'hr'
       );
+      console.log({processed, liveIndicators, fetchedIndicators});
       if(processed.length > 0){
+        if(title.includes('Nurses and Midwives')){
+          setdata(processed[0])
+        }else{
+          setdata(processed[1])
+
+        }
         setnoData(false)
-        setdata(processed)
 
       }else{
         setnoData(true)
@@ -120,7 +126,7 @@ const MocNursesMidWife: FC<{
               paddingTop: "1rem",
             }}
           >
-            200
+            {data?.value} %
           </span>{" "}
           <span style={{fontSize: '12px'}}>{title}</span>
         </Box>
