@@ -545,7 +545,6 @@ export const serviceCardData = (year, quarter) => {
     "indicator9National",
     "indicator36National",
   ];
-  console.log(year, quarter);
   const data = AllIndicators.filter((e) =>
     liveIndicators.includes(e.indicatorNational)
   );
@@ -555,7 +554,6 @@ export const serviceCardData = (year, quarter) => {
     liveIndicators.forEach((e, i) => {
       const indicators = fetchedIndicators[e] || null;
       const d = data[i];
-      console.log(d);
       if (indicators) {
         const filtered = indicators.filter(
           (ind) => ind.year === year && ind.quarter === quarter

@@ -50,7 +50,7 @@ const MocNursesMidWife: FC<{
       );
       console.log({processed, liveIndicators, fetchedIndicators});
       if(processed.length > 0){
-        if(title.includes('Nurses and Midwives')){
+        if(title.includes('Minimum of two (2) midwives deployed by SPHCB/LGA')){
           setdata(processed[0])
         }else{
           setdata(processed[1])
