@@ -63,6 +63,8 @@ export default function Router() {
         { path: "", element: <Navigate to="/dashboard/app" replace /> },
         { path: "app", element: <GeneralApp /> },
         { path: "nphcda", element: <NPHCDADashboard /> },
+        { path: "nhia", element: <NHIADashboard /> },
+        { path: "emt", element: <EMTDashboard /> },
         {
           path: "m-and-e",
 
@@ -126,6 +128,12 @@ const GeneralApp = Loadable(
 );
 const NPHCDADashboard = Loadable(
   lazy(() => import("../pages/dashboard/nphcda-dashboard"))
+);
+const NHIADashboard = Loadable(
+  lazy(() => import("../pages/dashboard/nhia-dashboard"))
+);
+const EMTDashboard = Loadable(
+  lazy(() => import("../pages/dashboard/emt-dashboard"))
 );
 const StatePage = Loadable(lazy(() => import("../pages/dashboard/state")));
 const LGAPage = Loadable(lazy(() => import("../pages/dashboard/lga")));

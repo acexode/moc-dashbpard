@@ -218,7 +218,7 @@ const NPHCDADashboard: FC = () => {
   return (
     <Page title="General: App | BHCPF">
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <NoticeBackdrop />
+        <NoticeBackdrop text="Data is currently being verified" />
         <Grid container spacing={2}>
           {assessmentData?.map((dt, index) => (
             <Grid item xs={12} md={3} key={index}>

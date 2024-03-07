@@ -38,6 +38,7 @@ import MocFinance from "../../components/_dashboard/general-app/MocFinance";
 import MocNursesMidWife from "../../components/_dashboard/general-app/MocCard";
 import MocKPIAnswers from "../../components/_dashboard/general-app/MocKPIAnswers";
 import RiskFactors from "../../components/_dashboard/general-app/RiskFactors";
+import MOCDateFilter from "../../components/_dashboard/general-app/MOCDateFilter";
 
 const GeneralApp: FC = () => {
   const { themeStretch, setfetchedIndicators, setAllTierIndicators } =
@@ -214,12 +215,16 @@ const GeneralApp: FC = () => {
     totalHfAssessedCount,
     totalFacilities
   );
-  const mocServiceCard = serviceCardData(year, quarter)
+  const mocServiceCard = serviceCardData(selectedState.year, selectedState.quarter)
 
   return (
     <Page title="General: App | BHCPF">
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
+        <MOCDateFilter
+              selectedState={selectedState}
+              setSelectedState={setSelectedState}
+            />
           {mocServiceCard?.map((dt, index) => (
             <Grid item xs={12} md={3} key={index}>
               <ServicesCard
@@ -250,7 +255,7 @@ const GeneralApp: FC = () => {
               defualtState={selectedState}
               color="#e8e0f2"
               icon="nurse-midwife"
-              title="Nurses and Midwives  deployed by SPHCB/LGA"
+              title="Minimum of two (2) midwives deployed by SPHCB/LGA"
             />
           </Grid>
 
@@ -260,7 +265,7 @@ const GeneralApp: FC = () => {
               defualtState={selectedState}
               color="#d6eccf"
               icon="comm"
-              title="CHEWS  deployed by SPHCB/LGA"
+              title="Minimum of two (2) CHEWs deployed by SPHCB/LGA"
             />
           </Grid>
           <Grid item xs={12} md={6} sm={6} lg={6}>

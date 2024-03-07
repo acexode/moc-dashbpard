@@ -49,9 +49,11 @@ const sidebarConfig = [
       },
       {
         title: "NHIA",
+        path: PATH_DASHBOARD.general.nhia,
       },
       {
         title: "EMT",
+        path: PATH_DASHBOARD.general.emt,
         // icon: ICONS.hrh,
         // path:hr_menu,
         // isExternal:true

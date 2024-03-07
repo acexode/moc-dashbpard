@@ -13,7 +13,7 @@ export const AllIndicators = [
     },
     {
         "id": "ffbe3c2ff4da4e6e8e7b56be0f075901",
-        "name": "states with functional Coordination platforms established at state level",
+        "name": "States with functional Coordination platforms established at state level",
         "group": "Governance",
         "groupKey": "governance",
         "completed": false,

@@ -52,6 +52,7 @@ const MocFinance: FC<{
         tier,
         "finance"
       );
+      console.log(liveIndicators, ltype);
       const labelTier = getIndicatorTier(tier);
       setindicator(ltype);
       const processed = processIndicators(

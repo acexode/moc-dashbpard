@@ -22,6 +22,8 @@ function path(root: string, sublink: string) {
     general: {
       app: path(ROOTS_DASHBOARD, '/app'),
       nphcda: path(ROOTS_DASHBOARD, '/nphcda'),
+      nhia: path(ROOTS_DASHBOARD, '/nhia'),
+      emt: path(ROOTS_DASHBOARD, '/emt'),
       
     },
     m_and_e: {

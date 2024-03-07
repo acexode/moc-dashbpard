@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Backdrop, Button, Card, CardActions, CardContent,  Typography } from "@mui/material";
 import Logo from '../../Logo';
 import { useNavigate } from 'react-router-dom';
-const NoticeBackdrop = () => {
+const NoticeBackdrop: FC<{text: string}> = ({text}) => {
     let navigate = useNavigate();
     const onNavigate = () => navigate('/dashboard/app')
   return (
@@ -21,7 +21,7 @@ const NoticeBackdrop = () => {
           Notice !!
         </Typography>
         <Typography variant="body2" color="text.light">
-          Data is currently being verified
+          {text}
         </Typography>
       </CardContent>
       <CardActions sx={{display: 'flex', justifyContent: 'center'}}>
