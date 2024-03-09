@@ -63,19 +63,22 @@ const MocKPIAnswers: FC<IMocKPIAnswers> = ({
 
     MocAxiosInstance.get("moc-kpis")
       .then((res) => {
-        console.log(res.data.data);
         const {data} = res.data
-        const kpi2024 = data.filter(e => e.year === today.getFullYear())[0]
-        console.log(kpi2024);
-        const mapKpi = indicatorLabel.map(i => {
-          for(let [key, val] of Object.entries(kpi2024)){
-              if(key === i.key){
-                return {...i, value: val}
-              }
-          }
-        })
-        console.log(mapKpi);
-        setvalues(mapKpi)
+        console.log(data);
+        if(data.length > 0){
+          const kpi2024 = data.filter(e => e.year === today.getFullYear())[0]
+          console.log(kpi2024);
+          const mapKpi = indicatorLabel.map(i => {
+            for(let [key, val] of Object.entries(kpi2024)){
+                if(key === i.key){
+                  return {...i, value: val}
+                }
+            }
+          })
+          console.log(mapKpi);
+          setvalues(mapKpi)
+
+        }
         // setQuestions(res?.data.data);
         
       })

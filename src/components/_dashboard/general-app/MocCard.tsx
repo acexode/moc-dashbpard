@@ -48,7 +48,6 @@ const MocNursesMidWife: FC<{
         state,
         'hr'
       );
-      console.log({processed, liveIndicators, fetchedIndicators});
       if(processed.length > 0){
         if(title.includes('Minimum of two (2) midwives deployed by SPHCB/LGA')){
           setdata(processed[0])

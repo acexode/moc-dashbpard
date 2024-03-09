@@ -137,16 +137,16 @@ export const fetchAllDasboardIndicators = async (
 ) => {
   await Promise.all([
     fetchAssessmentIndicators(
+      "me-assessment-indicators/proportion",
+      setMeIndicators
+    ),
+    fetchAssessmentIndicators(
       "state-assessment-indicators/proportion",
       setIndicators
     ),
     fetchAssessmentIndicators(
       "lga-assessment-indicators/proportion",
       setLgaIndicators
-    ),
-    fetchAssessmentIndicators(
-      "me-assessment-indicators/proportion",
-      setMeIndicators
     ),
   ]);
 };

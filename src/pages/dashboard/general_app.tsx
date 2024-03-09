@@ -197,6 +197,11 @@ const GeneralApp: FC = () => {
         });
         settier("State");
       } else {
+        console.log({
+          ...meIndicators.National,
+          ...lgaindicators.National,
+          ...indicators.National,
+        });
         setfetchedIndicators({
           ...meIndicators.National,
           ...lgaindicators.National,
@@ -207,14 +212,7 @@ const GeneralApp: FC = () => {
     }
   }, [meIndicators, selectedState]);
 
-  const assessmentData: IServiceCard[] = createAssessmentData(
-    totalStateAssessedCount,
-    stateNumber,
-    totalLgaAssessedCount,
-    totalLgas,
-    totalHfAssessedCount,
-    totalFacilities
-  );
+
   const mocServiceCard = serviceCardData(selectedState.year, selectedState.quarter)
 
   return (

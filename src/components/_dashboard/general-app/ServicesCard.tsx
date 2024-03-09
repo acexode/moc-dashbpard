@@ -118,7 +118,7 @@ const ServicesCard: FC<IServiceCard> = ({
               isMoney ? (
                 formatter.format(value)
               ) : (
-                value
+                value  + '%'
               )
             ) : (
               <Skeleton variant="rectangular" width={100} height={30} />
