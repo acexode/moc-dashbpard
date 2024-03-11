@@ -66,7 +66,10 @@ const ServicesCard: FC<IServiceCard> = ({
 }) => {
   const theme = useTheme();
   let navigate = useNavigate();
-  const onNavigate = () => navigate(path);
+  const onNavigate = () => {
+    console.log(path);
+    // navigate(path)
+  };
 
   const chartOptions = {
     colors: color,

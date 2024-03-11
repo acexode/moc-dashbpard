@@ -14,6 +14,7 @@ import useSettings from "../../../hooks/useSettings";
 import TrendButton from "./TrendButton";
 import { DefaultState, getLiveIndicator, processIndicators } from "../../../utility/processIndicator";
 import NoData from "./NoData";
+import { indicatorBoard } from "../../settings/board";
 
 const today = new Date();
 const cquarter = Math.floor((today.getMonth() + 3) / 3) - 1;
@@ -33,7 +34,7 @@ const MocNursesMidWife: FC<{
   const [data, setdata] = useState([]);
   useEffect(() => {
     setnoData(true)
-    const settings = cachedIndicators;
+    const settings = cachedIndicators || indicatorBoard;
     if(settings && fetchedIndicators){
       const {ltype, liveIndicators} = getLiveIndicator(settings, AllIndicators, tier, 'hr');
       setindicator(ltype)

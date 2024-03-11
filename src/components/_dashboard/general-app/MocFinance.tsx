@@ -17,6 +17,7 @@ import {
 } from "../../../utility/processIndicator";
 import NoData from "./NoData";
 import styled from "@emotion/styled";
+import { indicatorBoard } from "../../settings/board";
 
 const IconContainer = styled("div")(({}) => ({
   position: "absolute",
@@ -44,7 +45,8 @@ const MocFinance: FC<{
   const [noData, setnoData] = useState(true);
   useEffect(() => {
     // setnoData(true)
-    const settings = cachedIndicators;
+    const settings = cachedIndicators || indicatorBoard ;
+    console.log(settings);
     if (settings && fetchedIndicators) {
       const { ltype, liveIndicators } = getLiveIndicator(
         settings,

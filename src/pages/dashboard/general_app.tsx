@@ -3,7 +3,7 @@ import { Container, Grid } from "@mui/material";
 
 import { useAuthUserContext } from "../../context/authUser.context";
 import { IServiceCard } from "../../db/types";
-import { levels } from "../../constants";
+import { indicatorSettings, levels } from "../../constants";
 import { AllStates } from "../../db/states";
 import { fetchLGAFacilityWard } from "../../utility/dashboard-fetch";
 import { categorizeIndicators } from "../../utility/processIndicator";
@@ -39,9 +39,11 @@ import MocNursesMidWife from "../../components/_dashboard/general-app/MocCard";
 import MocKPIAnswers from "../../components/_dashboard/general-app/MocKPIAnswers";
 import RiskFactors from "../../components/_dashboard/general-app/RiskFactors";
 import MOCDateFilter from "../../components/_dashboard/general-app/MOCDateFilter";
+import Settings from "../../layouts/dashboard/settings";
+import { indicatorBoard } from "../../components/settings/board";
 
 const GeneralApp: FC = () => {
-  const { themeStretch, setfetchedIndicators, setAllTierIndicators } =
+  const { themeStretch, setfetchedIndicators, setAllTierIndicators, handleIndicatorUpdates } =
     useSettings();
   const [totalLgas, setTotalLgas] = useState(0);
   const [totalFacilities, setFacilities] = useState(0);
@@ -159,6 +161,11 @@ const GeneralApp: FC = () => {
       }
     }
   }, [userData]);
+  useEffect(() => {
+    if (!localStorage.getItem(indicatorSettings)) {
+      handleIndicatorUpdates(indicatorBoard);
+    }
+  }, []);
 
   useEffect(() => {
     handleAssessedDataUpdate(
@@ -276,6 +283,7 @@ const GeneralApp: FC = () => {
           <TrendsModal selectedState={selectedState} />
         </Grid>
       </Container>
+      <Settings />
     </Page>
   );
 };
