@@ -70,6 +70,7 @@ const ServicesCard: FC<IServiceCard> = ({
     console.log(path);
     // navigate(path)
   };
+  console.log(value);
 
   const chartOptions = {
     colors: color,
@@ -118,11 +119,7 @@ const ServicesCard: FC<IServiceCard> = ({
           <Typography sx={{ fontSize: "10px" }}>State</Typography>
           <Typography variant="h3">
             {!loading ? (
-              isMoney ? (
-                formatter.format(value)
-              ) : (
-                value  + '%'
-              )
+              value ? value + '%' : ''
             ) : (
               <Skeleton variant="rectangular" width={100} height={30} />
             )}
