@@ -283,7 +283,6 @@ const GeneralApp: FC = () => {
           <TrendsModal selectedState={selectedState} />
         </Grid>
       </Container>
-      <Settings />
     </Page>
   );
 };
