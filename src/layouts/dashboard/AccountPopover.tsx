@@ -79,12 +79,12 @@ export default function AccountPopover() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    console.log(userProfile);
     if (
-      userProfile?.level === levels.state ||
-      userProfile?.level === levels.lga
+      userProfile?.access.toLowerCase === "viewer"
     ) {
       setmenuOptions(MENU_OPTIONS);
-    } else if (userProfile?.level === levels.national) {
+    } else {
       setmenuOptions(ADMIN_MENU_OPTIONS);
     }
   }, [userProfile]);

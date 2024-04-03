@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import React, { FC,useState } from "react";
+import React, { FC, useState } from "react";
 import {
   Button,
   Dialog,
@@ -9,7 +9,6 @@ import {
   DialogTitle,
   useMediaQuery,
   useTheme,
- 
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import axiosInstance from "../../../services/api_service";
@@ -18,58 +17,70 @@ import closeFill from "@iconify/icons-eva/close-fill";
 import { Icon } from "@mui/material";
 // import { useAuthUserContext } from "../../../context/authUser.context";
 import { LoadingButton } from "@mui/lab";
+import MocAxiosInstance from "../../../services/moc_service";
 
 interface IRemove {
-    modal:boolean,
-    toggle: any;
-    id?:number;
-    url?:string;
-    fetchData?:any;
-    param?:any
-    type?:string
-  }
+  modal: boolean;
+  toggle: any;
+  id?: number;
+  url?: string;
+  fetchData?: any;
+  param?: any;
+  type?: string;
+}
 
-export const Remove:FC<IRemove> = ({ id, param, fetchData, url,modal,toggle,type }) => {
+export const Remove: FC<IRemove> = ({
+  id,
+  param,
+  fetchData,
+  url,
+  modal,
+  toggle,
+  type,
+}) => {
+  console.log(type, id, url);
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  let mainUrl = type !== "Ward" ? `${url}/${id}/deactivate` :`${url}/${id}/delete`
-  const handleToggle =() => toggle()
+  let mainUrl =
+    type !== "Ward" ? `${url}/${id}` : `${url}/${id}/delete`;
+    console.log(mainUrl);
+  const handleToggle = () => toggle();
 
   const removeRow = () => {
     setLoading(true);
-    axiosInstance
-    .request({
-      method: type === 'Ward' ? 'delete' : 'patch',
-      url: mainUrl,
-      data: {
-        params: { [param]: id },
-      },
-    })
+    MocAxiosInstance
+      .request({
+        // method: type === "Ward" ? "delete" : "patch",
+        method:  "delete",
+        url: mainUrl,
+        data: {
+          params: { [param]: id },
+        },
+      })
       .then((res) => {
         console.log(res);
         enqueueSnackbar(`Deactivated!`, {
-            variant: "success",
-            action: (key) => (
-              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-                <Icon icon={closeFill} />
-              </MIconButton>
-            ),
-          });
+          variant: "success",
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          ),
+        });
         fetchData();
       })
       .catch((error) => {
         enqueueSnackbar(error?.response?.data?.message, {
-            variant: "error",
-            action: (key) => (
-              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-                <Icon icon={closeFill} />
-              </MIconButton>
-            ),
-          });
+          variant: "error",
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          ),
+        });
       })
       .finally(() => {
         setLoading(false);
@@ -90,21 +101,27 @@ export const Remove:FC<IRemove> = ({ id, param, fetchData, url,modal,toggle,type
 
         <DialogContent>Are you sure you want to deactivate this?</DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleToggle}  sx={{background:"grey",  '&:hover': {
-          // Define the hover styles here
-          backgroundColor: 'lightgray',
-        
-        },}}  color="primary">
+          <Button
+            autoFocus
+            onClick={handleToggle}
+            sx={{
+              background: "grey",
+              "&:hover": {
+                backgroundColor: "lightgray",
+              },
+            }}
+            color="primary"
+          >
             Cancel
           </Button>
           <LoadingButton
-                size="medium"
-                variant="contained"
-                loading={loading}
-                onClick={removeRow} 
-            >
-                Deactivate
-            </LoadingButton>
+            size="medium"
+            variant="contained"
+            loading={loading}
+            onClick={removeRow}
+          >
+            Deactivate
+          </LoadingButton>
         </DialogActions>
       </Dialog>
     </div>

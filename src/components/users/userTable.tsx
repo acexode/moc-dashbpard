@@ -110,7 +110,7 @@ const CustomTable: FC<ITable> = ({
 
   useEffect(() => {
     axiosInstance
-      .get("locations")
+      .get("locations/states")
       .then((res) => {
         const options = res?.data?.map((dt: any) => {
           return {
@@ -118,7 +118,6 @@ const CustomTable: FC<ITable> = ({
             id: dt?.id,
           };
         });
-        console.log(options);
         setLocations(options);
       })
       .catch((error) => {
@@ -324,6 +323,7 @@ const CustomTable: FC<ITable> = ({
                                   row={row}
                                   fetchAllUsers={fetchAllUsers}
                                   type="User"
+                                  url="users"
                                 />
                               </TableCell>
                             </TableRow>
