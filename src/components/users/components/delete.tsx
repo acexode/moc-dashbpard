@@ -38,7 +38,6 @@ export const Remove: FC<IRemove> = ({
   toggle,
   type,
 }) => {
-  console.log(type, id, url);
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -46,7 +45,6 @@ export const Remove: FC<IRemove> = ({
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   let mainUrl =
     type !== "Ward" ? `${url}/${id}` : `${url}/${id}/delete`;
-    console.log(mainUrl);
   const handleToggle = () => toggle();
 
   const removeRow = () => {

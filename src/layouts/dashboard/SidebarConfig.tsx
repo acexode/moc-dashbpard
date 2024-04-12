@@ -98,17 +98,17 @@ export const StateConfig = [
         icon: ICONS.dashboard,
       },
 
-      {
-        title: "M&E",
-        path: PATH_DASHBOARD.m_and_e.root,
-        icon: ICONS.reports,
-        children: [
-          { title: "State", path: PATH_DASHBOARD.m_and_e.state },
-          { title: "LGA", path: PATH_DASHBOARD.m_and_e.lga },
-          { title: "HF", path: PATH_DASHBOARD.m_and_e.hf },
-          // { title: "Progress Report", path: PATH_DASHBOARD.m_and_e.viewProgressReport },
-        ],
-      },
+      // {
+      //   title: "M&E",
+      //   path: PATH_DASHBOARD.m_and_e.root,
+      //   icon: ICONS.reports,
+      //   children: [
+      //     { title: "State", path: PATH_DASHBOARD.m_and_e.state },
+      //     { title: "LGA", path: PATH_DASHBOARD.m_and_e.lga },
+      //     { title: "HF", path: PATH_DASHBOARD.m_and_e.hf },
+      //     // { title: "Progress Report", path: PATH_DASHBOARD.m_and_e.viewProgressReport },
+      //   ],
+      // },
       // {
       //   title: "Financial Management",
       //   path: PATH_DASHBOARD.financial_management.root,

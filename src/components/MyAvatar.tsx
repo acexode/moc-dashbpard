@@ -18,7 +18,7 @@ export default function MyAvatar({ ...other }) {
       // color={ createAvatar(userProfile?.name).color}
       {...other}
     >
-      {createAvatar(userProfile?.name).name}
+      {createAvatar(userProfile?.firstName).name}
     </MAvatar>
   );
 }

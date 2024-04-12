@@ -67,12 +67,11 @@ export default function DashboardNavbar({ onOpenSidebar }: any) {
     userState: { userProfile },
   } = useAuthUserContext();
   useEffect(() => {
-    if (userProfile?.level === levels.state) {
+    if (userProfile?.access === "viewer") {
       setsidebar(StateConfig);
-    } else if (userProfile?.level === levels.lga) {
-      setsidebar(LGAConfig);
-    } else if (userProfile?.level === levels.national) {
+    } else  {
       setsidebar(sidebarConfig);
+
     }
   }, [userProfile]);
   return (

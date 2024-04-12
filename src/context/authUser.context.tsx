@@ -34,7 +34,7 @@ const AuthUserProvider = ({ children }: Props) => {
   const [userState, dispatch] = useReducer(authUserReducer, initialState);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const user = tokenService.getUser();
+  const user = tokenService.getMOCUser();
   let navigate = useNavigate();
   useEffect(() => {
     if (user) {

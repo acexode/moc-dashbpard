@@ -69,7 +69,7 @@ function NavItem({ item, active, isShow }: any) {
   const handleOpen = () => {
     setOpen((prev: any) => !prev);
   };
-  let stateName = userProfile?.name.split(" ")[0]
+  let stateName = userProfile?.firstName
  
   //
   const activeRootStyle = {

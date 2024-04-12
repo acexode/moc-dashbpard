@@ -81,7 +81,7 @@ export default function AccountPopover() {
   useEffect(() => {
     console.log(userProfile);
     if (
-      userProfile?.access.toLowerCase === "viewer"
+      userProfile?.access.toLowerCase() === "viewer" || userProfile?.access.toLowerCase() === "admin"
     ) {
       setmenuOptions(MENU_OPTIONS);
     } else {
