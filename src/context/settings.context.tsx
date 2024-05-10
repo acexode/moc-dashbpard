@@ -1,12 +1,13 @@
 // @ts-nocheck
 
 import PropTypes from 'prop-types';
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 // hooks
 import useLocalStorage from '../hooks/useLocalStorage';
 // theme
 import palette from '../theme/palette';
 import { indicatorSettings } from '../constants';
+import { indicatorBoard } from '../components/settings/board';
 
 // ----------------------------------------------------------------------
 
@@ -138,7 +139,8 @@ function SettingsProvider({ children }:any) {
     themeStretch: initialState.themeStretch
   });
   const [indicatorUpdates, setindicatorUpdates] = useState(null)
-  const [cachedIndicators, setcachedIndicators] = useState(JSON.parse(localStorage.getItem(indicatorSettings)))
+  const [cachedIndicators, setcachedIndicators] = useState(indicatorBoard)
+  console.log(cachedIndicators);
   const [selectedIndicator, setselectedIndicator] = useState([])
   const [selectedIndicatorTitle, setselectedIndicatorTitle] = useState("")
   const [fetchedIndicators, setfetchedIndicators] = useState(null)
@@ -151,6 +153,13 @@ function SettingsProvider({ children }:any) {
       themeMode: event.target.value
     });
   };
+  useEffect(() => {
+    if(!cachedIndicators){
+      setcachedIndicators
+
+    }
+  }, [])
+  
 
   const onChangeDirection = (event: { target: { value: any; }; }) => {
     setSettings({

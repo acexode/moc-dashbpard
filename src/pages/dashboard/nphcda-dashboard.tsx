@@ -3,7 +3,7 @@ import {  Container, Grid } from "@mui/material";
 
 import { useAuthUserContext } from "../../context/authUser.context";
 import { IServiceCard } from "../../db/types";
-import { levels } from "../../constants";
+import { indicatorSettings, levels } from "../../constants";
 import { AllStates } from "../../db/states";
 import { fetchLGAFacilityWard } from "../../utility/dashboard-fetch";
 import { categorizeIndicators } from "../../utility/processIndicator";
@@ -38,9 +38,11 @@ import ServiceCardNPHCDA from "../../components/_dashboard/general-app/ServiceCa
 import Settings from "../../layouts/dashboard/settings";
 import Logo from "../../components/Logo";
 import NoticeBackdrop from "../../components/_dashboard/general-app/NoticeBackdrop";
+import { indicatorBoard } from "../../components/settings/board";
 
 const NPHCDADashboard: FC = () => {
-  const { themeStretch, setfetchedIndicators, setAllTierIndicators } =
+
+    const { themeStretch, setfetchedIndicators, setAllTierIndicators, handleIndicatorUpdates  } =
     useSettings();
   const [totalLgas, setTotalLgas] = useState(0);
   const [totalFacilities, setFacilities] = useState(0);
@@ -160,6 +162,11 @@ const NPHCDADashboard: FC = () => {
   }, [userData]);
 
   useEffect(() => {
+    if (!localStorage.getItem(indicatorSettings)) {
+      handleIndicatorUpdates(indicatorBoard);
+    }
+  }, []);
+  useEffect(() => {
     handleAssessedDataUpdate(
       totalLgaAssessed,
       totalStateAssessed,
@@ -179,7 +186,9 @@ const NPHCDADashboard: FC = () => {
     );
   }, []);
   useEffect(() => {
+    console.log(meIndicators);
     if (meIndicators) {
+
       const categories = categorizeIndicators(
         meIndicators,
         lgaindicators,
@@ -218,7 +227,7 @@ const NPHCDADashboard: FC = () => {
   return (
     <Page title="General: App | BHCPF">
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <NoticeBackdrop text="Data is currently being verified" />
+        {/* <NoticeBackdrop text="Data is currently being verified" /> */}
         <Grid container spacing={2}>
           {assessmentData?.map((dt, index) => (
             <Grid item xs={12} md={3} key={index}>
@@ -288,7 +297,7 @@ const NPHCDADashboard: FC = () => {
           <TrendsModal selectedState={selectedState} />
         </Grid>
       </Container>
-      <Settings />
+      {/* <Settings /> */}
     </Page>
   );
 };
