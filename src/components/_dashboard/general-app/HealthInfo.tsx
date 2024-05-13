@@ -43,7 +43,6 @@ const HealthInfo: FC<{
       const {ltype, liveIndicators} = getLiveIndicator(settings, AllIndicators, tier, 'his');
       setindicator(ltype);
       const labelTier = getIndicatorTier(tier);
-      console.log({liveIndicators, ltype, settings, tier, AllIndicators, fetchedIndicators});
       const processed = processIndicators(
         fetchedIndicators,
         ltype,
@@ -53,8 +52,7 @@ const HealthInfo: FC<{
         labelTier,
         state,
         "his"
-      );
-      console.log(processed);
+      )
       if (processed.length > 0) {
         setnoData(false)
         const val = processed[0];

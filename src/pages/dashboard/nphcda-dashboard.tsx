@@ -39,6 +39,7 @@ import Settings from "../../layouts/dashboard/settings";
 import Logo from "../../components/Logo";
 import NoticeBackdrop from "../../components/_dashboard/general-app/NoticeBackdrop";
 import { indicatorBoard } from "../../components/settings/board";
+import tokenService from "../../services/tokenService";
 
 const NPHCDADashboard: FC = () => {
 
@@ -76,23 +77,25 @@ const NPHCDADashboard: FC = () => {
   } = useAuthUserContext();
 
   useEffect(() => {
-    setuserData(userProfile);
-    let level = userProfile?.level;
-    let locationId = userProfile?.locationId;
+    const user = tokenService.getUser()
+    console.log(user);
+    setuserData(user);
+    let level = user?.level;
+    let locationId = user?.locationId;
     if (level === "National" && selectedState.state) {
       level = "State";
       locationId = AllStates.filter((e) => e.label === selectedState.state)[0]
         .id;
-      setuserData({ ...userProfile, level, locationId });
+      setuserData({ ...user, level, locationId });
     } else {
-      level = userProfile?.level;
-      locationId = userProfile?.locationId;
-      setuserData(userProfile);
+      level = user?.level;
+      locationId = user?.locationId;
+      setuserData(user);
     }
     const { lgaUrl, hfUrl, fUrl } = getUrls(
       level,
       locationId,
-      userProfile,
+      user,
       levels
     );
     setfacilityUrl(fUrl);
