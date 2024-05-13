@@ -35,7 +35,7 @@ const CHART_DATA = [{ data: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26] }];
 const ServiceCardNPHCDA: FC<IServiceCard> = ({ title, color, value, show,classname,path,loading, sub, subTitle, showFCT, user,isMoney }) => {
   const theme = useTheme();
   let navigate = useNavigate();
-  const onNavigate = () => navigate(path)
+  const onNavigate = () => console.log('navigate') // navigate(path)
 
 
   const chartOptions = {
