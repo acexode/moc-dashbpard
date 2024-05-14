@@ -63,30 +63,16 @@ const HandleExport: React.FC<HandleExportProps> = ({
 
   return (
     <Box sx={{ display: "flex", gap: "1rem", p: "0.5rem", flexWrap: "wrap" }}>
-      <Button
+      
+      {/* <Button
         color="primary"
         onClick={handleExportData}
         startIcon={<FileDownloadIcon />}
         variant="contained"
       >
-        Export Data
-      </Button>
-      {/* <Button
-        disabled={table.getPrePaginationRowModel().rows.length === 0}
-        onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
-        startIcon={<FileDownloadIcon />}
-        variant="contained"
-      >
-        Export All Rows
-      </Button>
-      <Button
-        disabled={table.getRowModel().rows.length === 0}
-        onClick={() => handleExportRows(table.getRowModel().rows)}
-        startIcon={<FileDownloadIcon />}
-        variant="contained"
-      >
-        Export Page Rows
+        Export Data NOTE: // UNCOMMENT THIS TO SHOW THE EXPORT BUTTON
       </Button> */}
+     
     </Box>
   );
 };

@@ -11,9 +11,10 @@ import EssentialMedicineTable from "../../../shared/tables/EssentialMed";
 import GovernanceTable from "../../../shared/tables/Governance";
 import CommunityLinkeageTable from "../../../shared/tables/Community";
 import HealthInformationTable from "../../../shared/tables/HealthInfo";
-import { useAuthUserContext } from "../../../context/authUser.context";
+// import { useAuthUserContext } from "../../../context/authUser.context";
 import InfraEquimentTable from "../../../shared/tables/InfraEquiment";
 import ServiceSelectionTable from "../../../shared/tables/ServiceSelection";
+import tokenService from "../../../services/tokenService";
 
 
 function CustomTabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
@@ -52,9 +53,10 @@ export interface IselectedState {
 }
 const TableTabs:React.FC<{indicators:any,lgaindicators:any,meIndicators:any, tier: string,selectedState:IselectedState}> = ({lgaindicators,meIndicators,tier,selectedState}) => {
   const [value, setValue] = React.useState(0);
-  const {
-    userState: { userProfile },
-  } = useAuthUserContext();
+  // const {
+  //   userState: { userProfile },
+  // } = useAuthUserContext();
+  const userProfile = tokenService.getUser()
 
   const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
     setValue(newValue);
