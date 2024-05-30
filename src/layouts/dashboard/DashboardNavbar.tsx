@@ -11,6 +11,9 @@ import {
   Toolbar,
   IconButton,
   Typography,
+  Grid,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 // hooks
 import useCollapseDrawer from "../../hooks/useCollapseDrawer";
@@ -25,14 +28,15 @@ import NavSection from "../../components/NavSection";
 import sidebarConfig, { LGAConfig, StateConfig } from "./SidebarConfig";
 import { useAuthUserContext } from "../../context/authUser.context";
 import NavBarSection from "../../components/NavBarSection";
+import GatewayPopover from "./MenuPopOver";
 
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 0; // original value 280;
 const COLLAPSE_WIDTH = 102;
 
-const APPBAR_MOBILE = 64;
-const APPBAR_DESKTOP = 65;
+const APPBAR_MOBILE = 60;
+const APPBAR_DESKTOP = 60;
 
 const RootStyle = styled(AppBar)(({ theme }) => ({
   // boxShadow: 'none',
@@ -62,6 +66,21 @@ DashboardNavbar.propTypes = {
 
 export default function DashboardNavbar({ onOpenSidebar }: any) {
   const { isCollapse } = useCollapseDrawer();
+  const theme = useTheme();
+
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
+
+  const getFontSize = () => {
+    if (isSmallScreen) {
+      return '1rem'; // Small font size for small screens
+    } else if (isMediumScreen) {
+      return '1.25rem'; // Medium font size for medium screens
+    } else if (isLargeScreen) {
+      return '1.5rem'; // Large font size for large screens
+    }
+  };
   const [sidebar, setsidebar] = useState<any>();
   const {
     userState: { userProfile },
@@ -69,9 +88,8 @@ export default function DashboardNavbar({ onOpenSidebar }: any) {
   useEffect(() => {
     if (userProfile?.access === "viewer") {
       setsidebar(StateConfig);
-    } else  {
+    } else {
       setsidebar(sidebarConfig);
-
     }
   }, [userProfile]);
   return (
@@ -83,24 +101,39 @@ export default function DashboardNavbar({ onOpenSidebar }: any) {
       }}
     >
       <ToolbarStyle>
-        <Box
-          component={RouterLink}
-          to="/dashboard/app"
-          sx={{
-            display: "inline-flex",
-            textDecoration: "none",
-            width: "250px",
-          }}
-        >
-          <Logo />
-         
-        </Box>
-        <MHidden width="mdDown">
-          <Box sx={{ flexGrow: 1 }}>
-            <NavBarSection navConfig={sidebar} isShow={!isCollapse} />
-          </Box>
-        </MHidden>
-            <div style={{display: 'flex', flex: '1', position: "absolute", right: "10px"}}>
+        <Grid container>
+          <Grid xs={2} sx={{ display: "flex" }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={{ xs: 0.5, sm: 1.5 }}
+              sx={{ width: "100%", justifyContent: "flex-start" }}
+            >
+              <GatewayPopover />
+            </Stack>
+          </Grid>
+          <Grid xs={8}>
+            <Stack
+              direction={{ xs: "column", sm: "row", md: "row" }}
+              // spacing={{ xs: 1, sm: 2, md: 4 }}
+              sx={{justifyContent: 'center', alignItems: 'center'}}
+            >
+              <Logo sx={{width: '25%'}} />
+              <Typography pt={1} pl={2} sx={{fontSize: getFontSize(), textAlign:'center'}}>Ministerial Oversight Committee Dashboard</Typography>
+            </Stack>
+          </Grid>
+          <Grid xs={2} sx={{ display: "flex" }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={{ xs: 0.5, sm: 1.5 }}
+              sx={{ width: "100%", justifyContent: "flex-end" }}
+            >
+              <AccountPopover />
+            </Stack>
+          </Grid>
+
+          {/* <div style={{display: 'flex', flex: '1', position: "absolute", right: "10px"}}>
 
         <MHidden width="mdUp">
           <IconButton onClick={onOpenSidebar} sx={{ mr: 1 }}>
@@ -108,15 +141,9 @@ export default function DashboardNavbar({ onOpenSidebar }: any) {
           </IconButton>
         </MHidden>
 
-        <Stack
-          direction="row"
-          alignItems="center"
-          spacing={{ xs: 0.5, sm: 1.5 }}
-          style={{  }}
-        >
-          <AccountPopover />
-        </Stack>
-            </div>
+       
+            </div> */}
+        </Grid>
       </ToolbarStyle>
     </RootStyle>
   );

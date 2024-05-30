@@ -41,7 +41,7 @@ const ADMIN_MENU_OPTIONS: IMENU[] = [
     icon: questionFill,
   },
   {
-    label: "Users",
+    label: "User Management",
     linkTo: PATH_DASHBOARD.settings.userManagement,
     icon: usersFill,
   },

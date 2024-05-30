@@ -1,15 +1,14 @@
-import { FC, useEffect, useState } from "react";
-import { Container, Grid } from "@mui/material";
+import { FC, useEffect, useRef, useState } from "react";
+import { Button, Container, Grid, Typography } from "@mui/material";
 
 import { useAuthUserContext } from "../../context/authUser.context";
-import { IServiceCard } from "../../db/types";
 import { indicatorSettings, levels } from "../../constants";
 import { AllStates } from "../../db/states";
 import { fetchLGAFacilityWard } from "../../utility/dashboard-fetch";
 import { categorizeIndicators } from "../../utility/processIndicator";
 import { getUrls, getYearAndQuarter } from "../../utility";
+import { handleDownloadPdf } from "../../utility/handleDownloadPdf";
 import {
-  createAssessmentData,
   fetchAllDasboardIndicators,
   fetchAssessmentData,
   handleAssessedDataUpdate,
@@ -19,19 +18,9 @@ import {
 } from "../../utility/setStateFunc";
 import {
   ServicesCard,
-  HumanResourcesCard,
-  FinancialCard,
 } from "../../components/_dashboard/general-app";
 
 import Page from "../../components/Page";
-import MedicineCard from "../../components/_dashboard/general-app/medinceCard";
-import SelectDropDownCard from "../../components/_dashboard/general-app/selectdropdown";
-import CommunityLinkeage from "../../components/_dashboard/general-app/Community";
-import HealthInfo from "../../components/_dashboard/general-app/HealthInfo";
-import TableTabs from "../../components/_dashboard/general-app/MainTable";
-import QualityAssessment from "../../components/_dashboard/general-app/QualityAssessment";
-import GovernmentStructure from "../../components/_dashboard/general-app/SettlementReportTable";
-import Supervisory from "../../components/_dashboard/general-app/Supervisory";
 import TrendsModal from "../../components/_dashboard/general-app/TrendsModal";
 import useSettings from "../../hooks/useSettings";
 import MocFinance from "../../components/_dashboard/general-app/MocFinance";
@@ -39,10 +28,13 @@ import MocNursesMidWife from "../../components/_dashboard/general-app/MocCard";
 import MocKPIAnswers from "../../components/_dashboard/general-app/MocKPIAnswers";
 import RiskFactors from "../../components/_dashboard/general-app/RiskFactors";
 import MOCDateFilter from "../../components/_dashboard/general-app/MOCDateFilter";
-import Settings from "../../layouts/dashboard/settings";
 import { indicatorBoard } from "../../components/settings/board";
+import { MIconButton } from "../../components/@material-extend";
+import { Icon } from "@iconify/react";
+import exportOutline from '@iconify/icons-eva/upload-outline';
 
 const GeneralApp: FC = () => {
+  const printRef = useRef();
   const { themeStretch, setfetchedIndicators, setAllTierIndicators, handleIndicatorUpdates } =
     useSettings();
   const [totalLgas, setTotalLgas] = useState(0);
@@ -225,11 +217,22 @@ const GeneralApp: FC = () => {
   return (
     <Page title="General: App | BHCPF">
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <Grid container spacing={1}>
-        <MOCDateFilter
+        <Grid container spacing={1} mt={3} ref={printRef}>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h3">
+          MOC BHCPF Dashboard
+          </Typography>
+          </Grid>
+        <Grid item xs={12} md={6} sx={{display: 'flex', justifyContent: 'flex-end'}}>
+        
+        <MIconButton style={{width: '170px', border: '1px solid #222736', borderRadius: '5px', color: '#222736', }}  onClick={() =>handleDownloadPdf(printRef)}>
+        Export  <Icon icon={exportOutline} width={30} height={30} style={{marginLeft: '5px'}} />
+      </MIconButton>
+          </Grid>
+        {/* <MOCDateFilter
               selectedState={selectedState}
               setSelectedState={setSelectedState}
-            />
+            /> */}
           {mocServiceCard?.map((dt, index) => (
             <Grid item xs={12} md={3} key={index}>
               <ServicesCard

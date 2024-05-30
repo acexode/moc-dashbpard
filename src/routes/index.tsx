@@ -19,7 +19,7 @@ const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => {
             ...(!isDashboard && {
               top: 0,
               left: 0,
-              width: 1,
+              width: 100,
               zIndex: 9999,
               position: "fixed",
             }),
