@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import PropTypes from 'prop-types';
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useRef } from 'react';
 // hooks
 import useLocalStorage from '../hooks/useLocalStorage';
 // theme
@@ -122,7 +122,8 @@ const initialState = {
   setColor: PRIMARY_COLOR[0],
   colorOption: [],
   trends: {},
-  selectedIndicator: []
+  selectedIndicator: [],
+  printDocRef: null
 };
 
 const SettingsContext = createContext(initialState);
@@ -146,6 +147,7 @@ function SettingsProvider({ children }:any) {
   const [fetchedIndicators, setfetchedIndicators] = useState(null)
   const [allTiersIndicators, setAllTierIndicators] = useState(null)
   const [showTrendModal, setShowTrendModal] = useState(false)
+  const printDocRef = useRef()
 
   const onChangeMode = (event: { target: { value: any; }; }) => {
     setSettings({
@@ -223,7 +225,8 @@ function SettingsProvider({ children }:any) {
         allTiersIndicators,
         setAllTierIndicators,
         selectedIndicatorTitle,
-        setselectedIndicatorTitle
+        setselectedIndicatorTitle,
+        printDocRef
       }}
     >
       {children}

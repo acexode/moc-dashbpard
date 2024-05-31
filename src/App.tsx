@@ -7,9 +7,11 @@ import ThemePrimaryColor from './components/ThemePrimaryColor';
 import { AuthUserProvider } from './context/authUser.context';
 import { useEffect } from 'react';
 import Settings from './layouts/dashboard/settings';
+import useSettings from './hooks/useSettings';
 
 
 function App() {
+  const {printDocRef} = useSettings()
   useEffect(() => {
     const handlePopstate = () => {
       window.location.reload();
@@ -22,6 +24,7 @@ function App() {
     };
   }, []);
   return (
+    <div ref={printDocRef}>
     <ThemeConfig>
       <ThemePrimaryColor>
         <NotistackProvider>
@@ -33,6 +36,8 @@ function App() {
         </NotistackProvider>
       </ThemePrimaryColor>
     </ThemeConfig>
+
+    </div>
   )
 }
 

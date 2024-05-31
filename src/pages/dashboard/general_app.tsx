@@ -1,5 +1,5 @@
-import { FC, useEffect, useRef, useState } from "react";
-import { Button, Container, Grid, Typography } from "@mui/material";
+import { FC, useEffect, useState } from "react";
+import { Container, Grid, Typography } from "@mui/material";
 
 import { useAuthUserContext } from "../../context/authUser.context";
 import { indicatorSettings, levels } from "../../constants";
@@ -34,8 +34,8 @@ import { Icon } from "@iconify/react";
 import exportOutline from '@iconify/icons-eva/upload-outline';
 
 const GeneralApp: FC = () => {
-  const printRef = useRef();
-  const { themeStretch, setfetchedIndicators, setAllTierIndicators, handleIndicatorUpdates } =
+
+  const { themeStretch, setfetchedIndicators, setAllTierIndicators, handleIndicatorUpdates, printDocRef } =
     useSettings();
   const [totalLgas, setTotalLgas] = useState(0);
   const [totalFacilities, setFacilities] = useState(0);
@@ -217,7 +217,7 @@ const GeneralApp: FC = () => {
   return (
     <Page title="General: App | BHCPF">
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <Grid container spacing={1} mt={3} ref={printRef}>
+        <Grid container spacing={1} mt={3}>
         <Grid item xs={12} md={6}>
           <Typography variant="h3">
           MOC BHCPF Dashboard
@@ -225,7 +225,7 @@ const GeneralApp: FC = () => {
           </Grid>
         <Grid item xs={12} md={6} sx={{display: 'flex', justifyContent: 'flex-end'}}>
         
-        <MIconButton style={{width: '170px', border: '1px solid #222736', borderRadius: '5px', color: '#222736', }}  onClick={() =>handleDownloadPdf(printRef)}>
+        <MIconButton style={{width: '170px', border: '1px solid #222736', borderRadius: '5px', color: '#222736', }}  onClick={() =>handleDownloadPdf(printDocRef)}>
         Export  <Icon icon={exportOutline} width={30} height={30} style={{marginLeft: '5px'}} />
       </MIconButton>
           </Grid>
