@@ -219,8 +219,8 @@ const GeneralApp: FC = () => {
     <Page title="General: App | BHCPF">
       <Container maxWidth={themeStretch ? false : "xl"}>
         <Grid container spacing={1} mt={1}>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h4">
+        <Grid item xs={12} md={6} pl={1}>
+          <Typography variant="h4" pl={1}>
           MOC BHCPF Dashboard
           </Typography>
           </Grid>
