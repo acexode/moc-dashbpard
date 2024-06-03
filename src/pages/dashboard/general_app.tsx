@@ -220,19 +220,15 @@ const GeneralApp: FC = () => {
       <Container maxWidth={themeStretch ? false : "xl"}>
         <Grid container spacing={1} mt={1}>
         <Grid item xs={12} md={6}>
-          <Typography variant="h3">
+          <Typography variant="h4">
           MOC BHCPF Dashboard
           </Typography>
           </Grid>
-        <Grid item xs={12} md={6} sx={{display: 'flex', justifyContent: 'flex-end'}}>
-        
-        <MIconButton style={{width: '170px', border: '1px solid #222736', borderRadius: '5px', color: '#222736', }}  onClick={() =>handleDownloadPdf(printDocRef)}>
-        Export  <Icon icon={exportOutline} width={30} height={30} style={{marginLeft: '5px'}} />
-      </MIconButton>
-          </Grid>
+       
         <MOCDateFilter
               selectedState={selectedState}
               setSelectedState={setSelectedState}
+              printDocRef={printDocRef}
             />
           {mocServiceCard?.map((dt, index) => (
             <Grid item xs={12} md={3} key={index}>

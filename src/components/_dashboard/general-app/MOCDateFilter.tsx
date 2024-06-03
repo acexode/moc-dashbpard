@@ -1,13 +1,25 @@
 // @ts-nocheck
 
-import { Card, Grid, Stack, TextField, Autocomplete, Box } from "@mui/material";
+import {
+  Card,
+  Grid,
+  Stack,
+  TextField,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+} from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { levels } from "../../../constants";
 import { useAuthUserContext } from "../../../context/authUser.context";
 import axiosInstance from "../../../services/api_service";
 import { AllStates } from "../../../db/states";
 import { getColor } from "../../../utility";
-import SelectInput from "../../SelectInput";
+import { Icon } from "@iconify/react";
+import exportOutline from "@iconify/icons-eva/upload-outline";
+import { MIconButton } from "../../@material-extend";
+import { handleDownloadPdf } from "../../../utility/handleDownloadPDF";
 
 const year = new Date().getFullYear();
 const years = Array.from(new Array(10), (val, index) => year - index);
@@ -23,10 +35,15 @@ interface IState {
 interface DropDown {
   selectedState: IState;
   setSelectedState: any;
+  printDocRef: any;
 }
 const dummyStates = AllStates;
 
-const MOCDateFilter: FC<DropDown> = ({ selectedState, setSelectedState }) => {
+const MOCDateFilter: FC<DropDown> = ({
+  selectedState,
+  setSelectedState,
+  printDocRef,
+}) => {
   const [states, setStates] = useState([]);
   const [lgas, setLgas] = useState([]);
   const [stateId, setStateId] = useState("");
@@ -77,52 +94,71 @@ const MOCDateFilter: FC<DropDown> = ({ selectedState, setSelectedState }) => {
       });
   }, [stateId]);
   const handleChange = (val, field) => {
+    console.log(val, field);
     setSelectedState((prevState) => ({
       ...prevState,
       [field]: ["year", "quarter"].includes(field) ? parseInt(val) : val,
     }));
   };
   return (
-    <Grid item sx={{marginTop: '-20px'}} xs={12} md={12}>
-  
-        <Grid container>
-          <Grid item xs={6}>
-            <Stack spacing={{ xs: 1, sm: 1 }}>
-            <label
-              style={{
-                fontSize: 10,
-                marginRight: 8,
-              }}
+    <Grid item xs={12} md={12}>
+      <Grid container justifyContent="space-between">
+        <Grid
+          sx={{ display: "flex", justifyContent: "space-between" }}
+          item
+          xs={6}
+        >
+          <FormControl fullWidth sx={{ margin: "0 10px" }}>
+            <InputLabel id="demo-simple-select-label">Year</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={selectedState.year}
+              label="Year"
+              onChange={(ev) => handleChange(ev.target.value, "year")}
             >
-              Year
-            </label>
-              <SelectInput
-                name="year"
-                defaultValue={selectedState.year}
-                handleChange={handleChange}
-                options={years}
-              />
-            </Stack>
-          </Grid>
-          <Grid item xs={6}>
-            <Stack spacing={{ xs: 1, sm: 1 }}>
-            <label
-              style={{
-                fontSize: 10,
-                marginRight: 8,
-              }}
+              {years.map((e) => (
+                <MenuItem value={e}>{e}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Quarter</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={selectedState.quarter}
+              label="Quarter"
+              onChange={(ev) => handleChange(ev.target.value, "quarter")}
             >
-              Quarter
-            </label>
-              <SelectInput
-                name="quarter"
-                defaultValue={selectedState.quarter}
-                handleChange={handleChange}
-                options={q}
-              />
-            </Stack>
-          </Grid>
+              {q.map((e) => (
+                <MenuItem value={e}>{e}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Grid>
+
+        <Grid item sx={{ display: "flex", justifyContent: "flex-end" }} xs={6}>
+          <MIconButton
+            style={{
+              width: "170px",
+              border: "1px solid #ddd",
+              borderRadius: "5px",
+              color: "#222736",
+              marginBottom: "10px",
+            }}
+            onClick={() => handleDownloadPdf(printDocRef)}
+          >
+            Export{" "}
+            <Icon
+              icon={exportOutline}
+              width={30}
+              height={30}
+              style={{ marginLeft: "5px" }}
+            />
+          </MIconButton>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };
