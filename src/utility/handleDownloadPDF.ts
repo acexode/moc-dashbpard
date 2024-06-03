@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-export const handleDownloadPdf = async (printRef) => {
+export const handleDownloadPdf = async (printRef: any) => {
     const element = printRef.current;
     const canvas = await html2canvas(element, { scale: 2 });
     const data = canvas.toDataURL('image/png');

@@ -7,7 +7,7 @@ import { AllStates } from "../../db/states";
 import { fetchLGAFacilityWard } from "../../utility/dashboard-fetch";
 import { categorizeIndicators } from "../../utility/processIndicator";
 import { getUrls, getYearAndQuarter } from "../../utility";
-import { handleDownloadPdf } from "../../utility/handleDownloadPdf";
+
 import {
   fetchAllDasboardIndicators,
   fetchAssessmentData,
@@ -32,6 +32,7 @@ import { indicatorBoard } from "../../components/settings/board";
 import { MIconButton } from "../../components/@material-extend";
 import { Icon } from "@iconify/react";
 import exportOutline from '@iconify/icons-eva/upload-outline';
+import { handleDownloadPdf } from "../../utility/handleDownloadPDF";
 
 const GeneralApp: FC = () => {
 
