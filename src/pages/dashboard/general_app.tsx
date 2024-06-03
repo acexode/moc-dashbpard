@@ -218,7 +218,7 @@ const GeneralApp: FC = () => {
   return (
     <Page title="General: App | BHCPF">
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <Grid container spacing={1} mt={3}>
+        <Grid container spacing={1} mt={1}>
         <Grid item xs={12} md={6}>
           <Typography variant="h3">
           MOC BHCPF Dashboard
@@ -230,10 +230,10 @@ const GeneralApp: FC = () => {
         Export  <Icon icon={exportOutline} width={30} height={30} style={{marginLeft: '5px'}} />
       </MIconButton>
           </Grid>
-        {/* <MOCDateFilter
+        <MOCDateFilter
               selectedState={selectedState}
               setSelectedState={setSelectedState}
-            /> */}
+            />
           {mocServiceCard?.map((dt, index) => (
             <Grid item xs={12} md={3} key={index}>
               <ServicesCard

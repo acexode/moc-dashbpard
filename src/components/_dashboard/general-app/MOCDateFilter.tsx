@@ -84,7 +84,7 @@ const MOCDateFilter: FC<DropDown> = ({ selectedState, setSelectedState }) => {
   };
   return (
     <Grid item sx={{marginTop: '-20px'}} xs={12} md={12}>
-      <Card sx={{ p: 1 }} elevation={1}>
+  
         <Grid container>
           <Grid item xs={6}>
             <Stack spacing={{ xs: 1, sm: 1 }}>
@@ -123,7 +123,6 @@ const MOCDateFilter: FC<DropDown> = ({ selectedState, setSelectedState }) => {
             </Stack>
           </Grid>
         </Grid>
-      </Card>
     </Grid>
   );
 };
