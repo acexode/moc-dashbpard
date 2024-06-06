@@ -46,7 +46,6 @@ const MocFinance: FC<{
   useEffect(() => {
     // setnoData(true)
     const settings = cachedIndicators || indicatorBoard ;
-    console.log(settings);
     if (settings && fetchedIndicators) {
       const { ltype, liveIndicators } = getLiveIndicator(
         settings,

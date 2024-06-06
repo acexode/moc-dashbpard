@@ -123,7 +123,6 @@ const columnList = [
   //   cardIds: [],
   // },
 ];
-console.log(columnList);
 
 
 const objFromArray = (array: any, key: any = "id") => {

@@ -92,7 +92,10 @@ const filterAssessedData = (data: any, selectedState: any) => {
 };
 
 const setAssessedCount = (filteredData: any, setCount: any) => {
-  setCount(filteredData[0]?.count ?? 0);
+  if(filteredData){
+    setCount(filteredData[0]?.count ?? 0);
+
+  }
 };
 
 export const handleAssessedDataUpdate = (

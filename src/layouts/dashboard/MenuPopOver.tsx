@@ -90,7 +90,6 @@ export default function GatewayPopover() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    console.log(userProfile);
     if (
       userProfile?.access.toLowerCase() === "viewer" || userProfile?.access.toLowerCase() === "admin"
     ) {

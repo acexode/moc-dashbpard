@@ -141,7 +141,6 @@ function SettingsProvider({ children }:any) {
   });
   const [indicatorUpdates, setindicatorUpdates] = useState(null)
   const [cachedIndicators, setcachedIndicators] = useState(indicatorBoard)
-  console.log(cachedIndicators);
   const [selectedIndicator, setselectedIndicator] = useState([])
   const [selectedIndicatorTitle, setselectedIndicatorTitle] = useState("")
   const [fetchedIndicators, setfetchedIndicators] = useState(null)

@@ -45,10 +45,13 @@ const RiskFactors: FC<{
   useEffect(() => {
     const fetchData = async () => {
       setnoData(true);
-      const {year, quarter} = getYearAndQuarter()
+      // const {year, quarter} = getYearAndQuarter()
       const yearQuarter = year + 'Q' + quarter
       const response = await getDHISData();
+      console.log(response.data[0]);
+      console.log(yearQuarter);
       const seriesData = response.data[0].filter((r) => ids.includes(r.dataElementId) && r.period === yearQuarter).map(e => e.sumValue);
+      console.log(seriesData);
       setseries([
         {
           data: seriesData,
@@ -59,7 +62,7 @@ const RiskFactors: FC<{
 
     fetchData();
 
-  }, []);
+  }, [year, quarter]);
 
   const chartData = {
     series: [

@@ -70,7 +70,6 @@ const ServicesCard: FC<IServiceCard> = ({
     console.log(path);
     // navigate(path)
   };
-  console.log(value);
 
   const chartOptions = {
     colors: color,
